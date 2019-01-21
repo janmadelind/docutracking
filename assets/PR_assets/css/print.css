@@ -1,0 +1,5 @@
+@media print {
+.noprint {display:none;}
+
+#page-wrap {margin: 0 0 0 3%}
+}

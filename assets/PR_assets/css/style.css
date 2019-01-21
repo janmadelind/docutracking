@@ -1,0 +1,124 @@
+/*
+	 CSS-Tricks Example
+	 by Chris Coyier
+	 http://css-tricks.com
+*/
+
+* { margin: 0; padding: 0; }
+body { font: 13px/1.4 Calibri, Sans-serif; }
+#page-wrap { width: 800px; margin: 7% 0 0 30%}
+
+textarea { border: 0; font: 12px Calibri, Sans-Serif; overflow: hidden; resize: none; }
+table { border-collapse: collapse; }
+table td, table th { border: 1px solid black; padding: 0px; }
+
+#header { height: 15px; width: 100%; margin: 20px 0; background: #222; text-align: center; color: white; font: bold 12px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+
+#address { width: 250px; height: 150px; float: left; }
+#customer { overflow: hidden; }
+
+#logo { text-align: right; float: right; position: relative; margin-top: 25px; border: 1px solid #fff; max-width: 540px; max-height: 100px; overflow: hidden; }
+#logo:hover, #logo.edit { border: 1px solid #000; margin-top: 0px; max-height: 125px; }
+#logoctr { display: none; }
+#logo:hover #logoctr, #logo.edit #logoctr { display: block; text-align: right; line-height: 25px; background: #eee; padding: 0 5px; }
+#logohelp { text-align: left; display: none; font-style: italic; padding: 10px 5px;}
+#logohelp input { margin-bottom: 5px; }
+.edit #logohelp { display: block; }
+.edit #save-logo, .edit #cancel-logo { display: inline; }
+.edit #image, #save-logo, #cancel-logo, .edit #change-logo, .edit #delete-logo { display: none; }
+#customer-title { font-size: 20px; font-weight: bold; float: left; }
+
+.row {content:""; display: table; clear: both; box-sizing: border-box;}
+.column1 { float: left; width:153px; padding:10px; height:80px; border: 1px solid black;}
+.column2 { float: left; width:445px; padding:10px; height:80px; border: 1px solid black; text-align: center;}
+
+.column3 { float: left; width:84px; height:40px; }
+.col1{  float:left width:84px; height:20px; font: 12px Calibri, Sans-Serif;  border:1px solid black;}
+
+.column4 { float: left; width:131px;  height:30px;}
+.col2 { float:left; width:131px; height:20px; border: 1px solid black;  }
+
+.row1 {content:""; display: table; clear: both; box-sizing: border-box; margin-bottom: 20px;}
+.column12 { float: left; width:153px; padding:10px; height:30px; border: 1px solid black; text-align: center; font:16px Calibri, Sans-Serif;}
+.column22 { float: left; width:445px; padding:10px; height:30px; border: 1px solid black; text-align: center; font: bold 16px Calibri, Sans-Serif;}
+
+.column32 { float: left; width:82px;  height:38px; border: 1px solid black; }
+.col3{float: left; width:82px; height: 20px; font:12px Calibri, Sans-Serif;border: 1px solid black;}
+
+.column42 { float: left; width:150px;height:50px; border:0px solid black; }
+.col4{float: left; width:150px; height: 24px; border: 0px solid black;}
+
+.header {content:""; display: table; clear: both; box-sizing: border-box;}
+.h1{float: left; width:150px;  height:20px; border: 1px solid black;}
+.h2{ float: left; width:348px;  height:20px; border: 1px solid black; text-align: center;}
+.h3{ float: left; width:161px; height:20px;   border: 1px solid black;}
+.h4{  float: left; width:136px; height:20px;  border: 1px solid black; }
+
+.header1 {content:""; display: table; clear: both; box-sizing: border-box;}
+.h12{float: left; width:153px;  height:20px; border: 1px solid black;}
+.h22{ float: left; width:356px;  height:20px; border: 1px solid black; text-align: center;}
+.h32{ float: left; width:164px; height:20px;   border: 1px solid black;}
+.h42{  float: left; width:140px; height:20px;  border: 1px solid black; }
+
+.purpose { content:""; display: table; clear: both; box-sizing: border-box; }
+.p1{ float: left; width:153px;  height:50px; border: 1px solid black; }
+.p2{float: left; width:660px;  height:50px; border: 1px solid black;}
+
+.ra{content:""; display: table; clear: both; box-sizing: border-box; }
+.ra1{float: left; width:153px;  height:20px; border: 1px solid black; }
+.ra2{float: left; width:353px;  height:20px; border: 1px solid black; }
+.ra3{float: left; width:307px;  height:20px; border: 1px solid black; }
+
+.sign{ content:""; display: table; clear: both; box-sizing: border-box;}
+.s1{float: left; width:153px;  height:40px; border: 1px solid black; }
+.s2{float: left; width:353px;  height:40px; border: 1px solid black; }
+.s3{float: left; width:307px;  height:40px; border: 1px solid black; }
+
+.pn{content:""; display: table; clear: both; box-sizing: border-box;}
+.pn1{float: left; width:153px;  height:25px; border: 1px solid black; }
+.pn2{float: left; width:353px;  height:25px; border: 1px solid black; }
+.pn3{float: left; width:307px;  height:25px; border: 1px solid black; }
+
+.d{content:""; display: table; clear: both; box-sizing: border-box;}
+.d1{float: left; width:153px;  height:40px; border: 1px solid black;}
+.d2{float: left; width:353px;  height:40px; border: 1px solid black;}
+.d3{float: left; width:307px;  height:40px; border: 1px solid black;}
+
+.transaction{content:""; display: table; clear: both; box-sizing: border-box;}
+.t1{float: left; width:153px;  height:20px; border: 1px solid black;}
+.t2{float: left; width:660px;  height:20px; border: 1px solid black;}
+
+.signature{content:""; display: table; clear: both; box-sizing: border-box;}
+.sg1{float: left; width:153px;  height:20px; border: 1px solid black;}
+.sg2{float: left; width:660px;  height:20px; border: 1px solid black;}
+
+.box { position: absolute; width: 70px; height: 70px; border: 1px solid black; position: relative;  left:740px; bottom: 30px; margin-top: 15px;}
+
+#meta { margin-top: 1px; width: 300px; float: right; }
+#meta td { text-align: right;  }
+#meta td.meta-head { text-align: left; background: #eee; }
+#meta td textarea { width: 100%; height: 20px; text-align: right; }
+
+#items { clear: both; width: 100%; margin: 30px 0 0 0; border: 1px solid black; height: 10px; }
+#items th { background: none; }
+#items textarea { width: 80px; height: 15px; }
+#items tr.item-row td { border: 0; vertical-align: top;  border: 1px solid black; height: 10px; }
+#items td.description { width: 339px;  }
+#items td.unit{ width: 50px; }
+#items td.item-name { width: 40px; }
+#items td.description textarea, #items td.item-name textarea { width: 100%;}
+#items td.total-line { border-right: 0; font: 12px Calibri, Sans-Serif; }
+#items td.total-value { border-left: 0;  }
+#items td.total-value textarea { height: 20px; background: none; }
+#items td.balance { background: #eee; }
+#items td.blank { border: 0; }
+#item2 { clear: both; width: 100%; margin:0px; border: 1px solid black; }
+
+#terms { text-align: center; margin: 20px 0 0 0; }
+#terms h5 { text-transform: uppercase; font: 13px Calibri, Sans-Serif; letter-spacing: 10px; border-bottom: 1px solid black; padding: 0 0 8px 0; margin: 0 0 8px 0; }
+#terms textarea { width: 100%; text-align: center;}
+
+textarea:hover, textarea:focus, #items td.total-value textarea:hover, #items td.total-value textarea:focus, .delete:hover { background-color:#cccccc; }
+
+.delete-wpr { position: relative; }
+.delete { display: block; color: #000; text-decoration: none; position: absolute; background: #EEEEEE; font-weight: bold; padding: 0px 3px; border: 1px solid; top: -6px; left: -22px; font-family: Verdana; font-size: 12px; }
