@@ -112,11 +112,11 @@
                                 
                                 <div role="tabpanel" class="tab-pane fade" id="bidders">
                                     <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                            <?php 
+										<?php 
                                             if($prbidders != NULL){
                                                 foreach($prbidders as $key){ 
                                             ?>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">  
                                             <div class="card" >
                                                 <div class="body bg-grey">
                                                     <p><b>Name:</b> <?php echo $key->bidders_name?></p>
@@ -127,14 +127,14 @@
                                                     <p><b>Status:</b> (PENDING) </p>
                                                 </div>
                                             </div>
-                                            <?php 
+                                        </div>
+										<?php 
                                                 }
                                             } 
                                             else{
                                                 echo "No Bidders.";
                                             }
                                             ?>
-                                        </div>
                                     </div>  
                                 </div>
                                 
