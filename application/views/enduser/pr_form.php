@@ -408,7 +408,14 @@
 
   </div>
   
-  <button type="button" class="noprint btn bg-pink btn-lg waves-effect margin-down" data-toggle="modal" data-target="#scanPR" style="float:right; margin: 0% 50% 5% 15%;">SUBMIT PR</button>
+	<div class="icon-button-demo m-t-5 m-b-25 align-center noprint">
+    <button type="button" class="btn btn-default btn-circle-lg waves-effect waves-circle waves-float" onclick="window.print()">
+      <i class="material-icons">print</i>
+    </button>
+    <button type="button" class="btn btn-default btn-circle-lg waves-effect waves-circle waves-float" data-toggle="modal" data-target="#scanPR">
+      <i class="material-icons">done</i>
+    </button>
+  </div>																																		  
 
   <div class="modal fade" id="scanPR" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-sm" role="document">
