@@ -407,15 +407,15 @@
       </div>
 
   </div>
-  
-	<div class="icon-button-demo m-t-5 m-b-25 align-center noprint">
+
+  <div class="icon-button-demo m-t-5 m-b-25 align-center noprint">
     <button type="button" class="btn btn-default btn-circle-lg waves-effect waves-circle waves-float" onclick="window.print()">
       <i class="material-icons">print</i>
     </button>
     <button type="button" class="btn btn-default btn-circle-lg waves-effect waves-circle waves-float" data-toggle="modal" data-target="#scanPR">
       <i class="material-icons">done</i>
     </button>
-  </div>																																		  
+  </div>
 
   <div class="modal fade" id="scanPR" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-sm" role="document">
@@ -427,7 +427,7 @@
                           <form  action="<?php echo base_url('Admin_controller/addPR')?>" method="post">
                             Project Name: <input type="text" style="margin-bottom: 10px; width:170px;" name="projname">
                             Project Description: <input type="text" name="projdesc">
-                            <input class="btn bg-pink btn-lg waves-effect margin-down" style="margin: 10% 20% 5% 35%;"type="submit" name="Submit" value="Submit">
+                            <input type="submit" onclick="this.disabled=true;this.value='Submit';this.form.submit();" class="btn bg-pink btn-lg waves-effect margin-down" style="margin: 10% 20% 5% 35%;" name="Submit" value="Submit">
                           </form> 
                         </div>
                         

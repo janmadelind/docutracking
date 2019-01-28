@@ -32,7 +32,7 @@
     <link href="<?php echo base_url('assets/css/themes/all-themes.css');?>" rel="stylesheet" />
 </head>
 
-<body class=" theme-red">
+<body class="theme-red">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
@@ -51,7 +51,6 @@
     </div>
     <!-- #END# Page Loader -->
     <!-- Overlay For Sidebars -->
-    <div class="noprint">
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
     <!-- Search Bar -->
@@ -198,7 +197,7 @@
             <div class="user-info">
                 <div class="info-container">
                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $this->session->userdata['end_user_name']; ?></div>
-                    <div class="name"><?php echo $this->session->userdata['college_name']; ?> - <?php echo $this->session->userdata['department_name']; ?></div>
+                    <div class="name"><?php echo $this->session->userdata['college_name']; ?> <br> <?php echo $this->session->userdata['department_name']; ?></div>
 <!--                     <div class="email">john.doe@example.com</div> -->
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
@@ -225,6 +224,12 @@
                             <span>Purchase Requests</span>
                         </a> 
                         <ul class="ml-menu">
+                            <li>
+                                <a href="<?php echo site_url('enduser_table_submittedpr'); ?>">
+                                    <span>All Submitted</span>
+                                    <!-- <span class="badge bg-red" style="color: #fff;">18 new</span> -->
+                                </a>
+                            </li>
                             <li>
                                 <a href="<?php echo site_url('enduser_table_pending'); ?>">
                                     <span>Pending</span>
@@ -268,4 +273,3 @@
         <!-- #END# Left Sidebar -->
         <!-- Right Sidebar -->
     </section>
-</div>

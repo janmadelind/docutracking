@@ -6,7 +6,7 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                Purchase Requests
+                                <?php echo $title ?> Purchase Requests
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
@@ -27,10 +27,10 @@
                                     <thead>
                                         <tr>
                                             <th>PR#</th>
-                                            <th>Date</th>
+                                            <th>Date Submitted</th>
+                                            <th>Project Name</th>
                                             <th>Description</th>
-                                            <th>Mode</th>
-                                            <th>Office Originated</th>
+                                            <th>Mode of Procurement</th>
                                             <th>Amount</th>
                                             <th>Action</th>
                                         </tr>
@@ -38,27 +38,27 @@
                                     <tfoot>
                                         <tr>
                                             <th>PR#</th>
-                                            <th>Date</th>
+                                            <th>Date Submitted</th>
+                                            <th>Project Name</th>
                                             <th>Description</th>
-                                            <th>Mode</th>
-                                            <th>Office Originated</th>
+                                            <th>Mode of Procurement</th>
                                             <th>Amount</th>
                                             <th>Action</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
                                         <?php 
-                                        if($readPR!=NULL){
-                                            foreach ($readPR as $key) {
+                                        if($eu_readPR!=NULL){
+                                            foreach ($eu_readPR as $key) {
                                        ?>
                                         <tr>
                                             <td><?php echo $key->PR_No?></td>
                                             <td><?php echo $key->date_submitted?></td>
+                                            <td><?php echo $key->proj_name?></td>
                                             <td><?php echo $key->proj_description?></td>
                                             <td><?php echo $key->mode_of_procurement?></td>
-                                            <td><?php echo $key->college_name?> - <?php echo $key->department_name?> Department</td>
                                             <td><?php echo $key->amount?></td>
-                                            <td><?php echo'<a href="'.site_url('Admin_controller/enduser_details/'.$key->PR_No.'').'">'?>
+                                            <td><?php echo'<a href="'.site_url('Enduser_controller/enduser_details/'.$key->PR_No.'').'">'?>
                                                 <button type="button" class="btn bg-red waves-effect">View Details</button>
                                                 </a>
                                             </td>
@@ -77,23 +77,3 @@
             <!-- #END# Exportable Table -->
         </div>
     </section>
-
-    <!-- Jquery Core Js -->
-    <script src="<?php echo base_url('assets/plugins/jquery/jquery.min.js'); ?>"></script>
-
-    <!-- Bootstrap Core Js -->
-    <script src="<?php echo base_url('assets/plugins/bootstrap/js/bootstrap.js'); ?>"></script>
-
-    <!-- Select Plugin Js -->
-    <script src="<?php echo base_url('assets/plugins/bootstrap-select/js/bootstrap-select.js'); ?>"></script>
-
-
-    <!-- Custom Js -->
-    <script src="<?php echo base_url('assets/js/admin.js'); ?>"></script>
-    <script src="<?php echo base_url('assets/js/pages/tables/jquery-datatable.js'); ?>"></script>
-
-    <!-- Demo Js -->
-    <script src="<?php echo base_url('assets/js/demo.js'); ?>"></script>
-</body>
-
-</html>

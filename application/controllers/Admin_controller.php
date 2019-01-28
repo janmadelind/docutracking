@@ -17,7 +17,8 @@ class Admin_controller extends CI_Controller {
 		$data['procpending'] = $this->docutrackingmodel->proc_pending();
 		$data['bacongoing'] = $this->docutrackingmodel->bac_ongoing(); 
 		$data['procongoing'] = $this->docutrackingmodel->proc_ongoing(); 
-		$data['pr_done'] = $this->docutrackingmodel->PRdone(); 
+		$data['prdone'] = $this->docutrackingmodel->PRdone(); 
+		$data['prfail'] = $this->docutrackingmodel->PRfail(); 
 		$data['prinfo']['proj_name'] = "";
 		$data['prinfo']['proj_description'] = "";
 		$data['prinfo']['PR_No'] = "";
@@ -28,56 +29,90 @@ class Admin_controller extends CI_Controller {
 		$data['prinfo']['department_name'] = "";
 		$data['prinfo']['result'] = "";
 		$data['prinfo']['date_scanned'] = "";
+		// print_r($data['bacpending'] );
+		// print_r($data['procpending'] );
+		// exit();
 		$this->load->view('bac/nav');
 		$this->load->view('bac/bac', $data);
+		$this->load->view('footer_home');
+
 	}	
 	public function bac_table_pending(){
 		$data['readPR'] = $this->docutrackingmodel->read_bacpending(); 
+		$data['title'] = "Pending";
 		$this->load->view('bac/nav');
 		$this->load->view('bac/admin_table',$data);
+		$this->load->view('footer');
 	}
 	public function bac_table_ongoing(){
 		$data['readPR'] = $this->docutrackingmodel->read_bacongoing(); 
+		$data['title'] = "Ongoing";
 		$this->load->view('bac/nav');
 		$this->load->view('bac/admin_table',$data);
+		$this->load->view('footer');
 	}
 	public function bac_table_done(){
 		$data['readPR'] = $this->docutrackingmodel->read_PRdone(); 	
+		$data['title'] = "Approved";
 		$this->load->view('bac/nav');
 		$this->load->view('bac/admin_table',$data);
+		$this->load->view('footer');
 	}
 	public function bac_table_failed(){
+		$data['readPR'] = $this->docutrackingmodel->readPR_failed(); 	
+		$data['title'] = "Failed";
 		$this->load->view('bac/nav');
-		$this->load->view('bac/admin_table');
+		$this->load->view('bac/admin_table',$data);
+		$this->load->view('footer');
 	}
 	public function bac_notif(){
 		$this->load->view('bac/nav');
 		$this->load->view('notif');
+		$this->load->view('footer');
 	}
 	public function bac_details($data){
 		$det['prdetails'] = $this->docutrackingmodel->read_PRdetails($data);	
+		$curloc= $this->docutrackingmodel->checkSequence($data);	
+		$det['prcurloc'] = $this->docutrackingmodel->getLoc($curloc);	
 		$det['prbidders'] = $this->docutrackingmodel->read_PRbidders($data);	
 		$det['prattachements'] = $this->docutrackingmodel->read_PRattachments($data);
 		$det['prremarks'] = $this->docutrackingmodel->read_PRremarks($data);	
 		$this->load->view('bac/nav');
 		$this->load->view('bac/bac_details',$det);
+		$this->load->view('footer');
 	}
-	#ADD PR mode in BAC
-	public function bac_addPR_mode($data){
+	#ADD PR mode type in BAC
+	public function bac_addPR_status($data){
+		$status =$this->input->post('status');
+		$add_status = $this->docutrackingmodel->addPR_status($status,$data);
+		if($add_status){
+			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
+			redirect('bac', 'refresh');
+		}
+		else{
+			echo "<script type='text/javascript'>alert('ERROR!'); </script>";
+			redirect('bac', 'refresh');
+		}
+	}
+
+	#ADD PR mode type in BAC
+	public function bac_addPR_modetype($data){
 		$mode =$this->input->post('mode')[0];
+		$type=$this->input->post('type')[0];
 		// $submode =$this->input->post('submode');
-		$add_mode = $this->docutrackingmodel->addPR_mode($mode,$data);
-		$mode_result = $this->docutrackingmodel->addPR_seq($mode,$data);
-		if($add_mode && $mode_result){
+		$add_mode = $this->docutrackingmodel->addPR_modetype($mode,$type,$data);
+		$mode_result = $this->docutrackingmodel->addPR_seq($mode,$type,$data);
+		if($mode_result){
 			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
 			$this->bac_details($data);
 		}
 		else{
-			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
+			echo "<script type='text/javascript'>alert('ERROR!'); </script>";
+			$this->bac_details($data);
+
 		}
-
-
 	}
+	
 	#ADD PR attachments in BAC
 	public function bac_addPR_attachments($data){
 		$attachedfile = $this->input->post('attachedfile');
@@ -88,7 +123,9 @@ class Admin_controller extends CI_Controller {
 			$this->bac_details($data);
 		}
 		else{
-			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
+			echo "<script type='text/javascript'>alert('ERROR!'); </script>";
+			$this->bac_details($data);
+
 		}
 
 	}
@@ -104,201 +141,13 @@ class Admin_controller extends CI_Controller {
 			$this->bac_details($data);
 		}
 		else{
-			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-		}
+			echo "<script type='text/javascript'>alert('ERROR!'); </script>";
+			$this->bac_details($data);
 
-	}
-######################################################################################
-######################################################################################
-######################################################################################
-######################################################################################
-	public function procurement(){
-		$data['procpending'] = $this->docutrackingmodel->proc_pending();
-		$data['procongoing'] = $this->docutrackingmodel->proc_ongoing(); 
-		$data['pr_done'] = $this->docutrackingmodel->PRdone();
-		$data['prinfo']['proj_name'] = "";
-		$data['prinfo']['proj_description'] = "";
-		$data['prinfo']['PR_No'] = "";
-		$data['prinfo']['date_submitted'] = "";
-		$data['prinfo']['amount'] = "";
-		$data['prinfo']['end_user_name'] = "";
-		$data['prinfo']['college_name'] = "";
-		$data['prinfo']['department_name'] = "";
-		$data['prinfo']['result'] = "";
-		$data['prinfo']['date_scanned'] = "";
-		$this->load->view('procurement/proc_nav');
-		$this->load->view('procurement/procurement',$data);
-	}		
-	public function procurement_table_pending(){
-		$data['readPR'] = $this->docutrackingmodel->read_procpending(); 	
-		$this->load->view('procurement/proc_nav');
-		$this->load->view('procurement/proc_admin_table',$data);
-	}
-	public function procurement_table_ongoing(){
-		$data['readPR'] = $this->docutrackingmodel->read_procongoing(); 			
-		$this->load->view('procurement/proc_nav');
-		$this->load->view('procurement/proc_admin_table',$data);
-	}
-	public function procurement_table_done(){
-		$data['readPR'] = $this->docutrackingmodel->read_PRdone(); 	//whole process
-		$this->load->view('procurement/proc_nav');
-		$this->load->view('procurement/proc_admin_table',$data);
-	}
-	public function procurement_table_failed(){
-		$this->load->view('procurement/proc_nav');
-		$this->load->view('procurement/proc_admin_table');
-	}
-	public function procurement_notif(){
-		$this->load->view('procurement/proc_nav');
-		$this->load->view('notif');
-	}
-	public function procurement_details($data){
-		$det['prremarks'] = $this->docutrackingmodel->read_PRremarks($data);	
-		$det['prdetails'] = $this->docutrackingmodel->read_PRdetails($data);	
-		$det['prbidders'] = $this->docutrackingmodel->read_PRbidders($data);	
-		$det['prattachements'] = $this->docutrackingmodel->read_PRattachments($data);
-		$det['allbidders'] = $this->docutrackingmodel->read_allbidders();
-		$this->load->view('procurement/proc_nav');
-		$this->load->view('procurement/proc_details',$det);
-	}
-	#ADD new PR bidders for PR
-	public function proc_addPR_oldbidders($data){
-		$attachedfile = $this->input->post('attachedfile');
-		$date_added = date('Y-m-d H:i:s T', time());
-		$attachments_result=$this->docutrackingmodel->add_PRattachments($data,$attachedfile,$date_added);
-		if($attachments_result){
-			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-			$this->procurement_details($data);
-		}
-		else{
-			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
 		}
 
 	}
 
-	#ADD old PR bidders for PR
-	public function proc_addPR_newbidders($data){
-		$bidders = $this->input->post('bidders');
-		$contact = $this->input->post('contact');
-		$email = $this->input->post('email');
-		$amount = $this->input->post('amount');
-		$date_added = date('Y-m-d H:i:s T', time());
-		$bidders_result = $this->docutrackingmodel->add_PRbidders($data,$bidders,$contact,$email);
-		$bidderID = $this->db->insert_id();
-		$bidderstrans_result = $this->docutrackingmodel->add_PRbidderstrans($data,$bidderID,$amount,$date_added);
-		if($bidderstrans_result){
-			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-			$this->procurement_details($data);
-		}
-		else{
-			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-		}
-	}
-
-#ADD PR attachments in PROC
-	public function proc_addPR_attachments($data){
-		$attachedfile = $this->input->post('attachedfile');
-		$date_added = date('Y-m-d H:i:s T', time());
-		$attachments_result=$this->docutrackingmodel->add_PRattachments($data,$attachedfile,$date_added);
-		if($attachments_result){
-			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-			$this->procurement_details($data);
-		}
-		else{
-			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-		}
-
-	}
-
-	#ADD PR remarks in PROC
-	public function proc_addPR_remarks($data){
-		$remarks = $this->input->post('remarks');
-		$date_added = date('Y-m-d H:i:s T', time());
-
-		$remarks_result=$this->docutrackingmodel->add_PRremarks($data,$remarks,$date_added,$_SESSION['admin_user_ID']);
-		if($remarks_result){
-			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-			$this->procurement_details($data);
-		}
-		else{
-			echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-		}
-
-	}
-###################################################################################
-###################################################################################
-###################################################################################
-###################################################################################
-	public function enduser(){
-		$data['euserpending'] = $this->docutrackingmodel->euser_pending($_SESSION['end_user_ID']);
-		$data['euserongoing'] = $this->docutrackingmodel->euser_ongoing($_SESSION['end_user_ID']); 
-		$data['pr_done'] = $this->docutrackingmodel->PRdone_eu($_SESSION['end_user_ID']); 
-
-		$this->load->view('enduser/eu_nav');
-		$this->load->view('enduser/enduser',$data);
-	}	
-	public function enduser_table_pending(){
-		$data['eu_readPR'] = $this->docutrackingmodel->read_PRpending_eu($_SESSION['end_user_ID']);
-		$this->load->view('enduser/eu_nav');
-		$this->load->view('enduser/enduser_table',$data);
-	}
-	public function enduser_table_ongoing(){
-		$data['eu_readPR'] = $this->docutrackingmodel->read_PRongoing_eu($_SESSION['end_user_ID']);
-		$this->load->view('enduser/eu_nav');
-		$this->load->view('enduser/enduser_table',$data);
-	}
-	public function enduser_table_done(){
-		$data['eu_readPR'] = $this->docutrackingmodel->read_PRdone_eu($_SESSION['end_user_ID']); 	
-		$this->load->view('enduser/eu_nav');
-		$this->load->view('enduser/enduser_table',$data);
-	}
-	public function enduser_table_failed(){ 
-		// $data['eu_readPR'] = $this->docutrackingmodel->readPR($_SESSION['end_user_ID']);//pr submitted by end user
-		$this->load->view('enduser/eu_nav');
-		$this->load->view('enduser/enduser_table');
-	}
-	public function enduser_notif(){
-		$this->load->view('enduser/eu_nav');
-		$this->load->view('notif');
-	}
-	public function enduser_details($data){
-		$det['prdetails'] = $this->docutrackingmodel->read_PRdetails($data);	
-		$det['prbidders'] = $this->docutrackingmodel->read_PRbidders($data);	
-		$det['prattachements'] = $this->docutrackingmodel->read_PRattachments($data);
-		$det['prremarks'] = $this->docutrackingmodel->read_PRremarks($data);	
-		$this->load->view('enduser/eu_nav');
-		$this->load->view('enduser/eu_details',$det);
-	}
-	// #ADD PR attachments in end user
-	// public function eu_addPR_attachments($data){
-	// 	$attachedfile = $this->input->post('attachedfile');
-	// 	$date_added = date('Y-m-d H:i:s T', time());
-	// 	$attachments_result=$this->docutrackingmodel->add_PRattachments($data,$attachedfile,$date_added);
-	// 	if($attachments_result){
-	// 		echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-	// 		$this->enduser_details($data);
-	// 	}
-	// 	else{
-	// 		echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-	// 	}
-
-	// }
-
-	// #ADD PR remarks in end user
-	// public function eu_addPR_remarks($data){
-	// 	$remarks = $this->input->post('remarks');
-	// 	$date_added = date('Y-m-d H:i:s T', time());
-
-	// 	$remarks_result=$this->docutrackingmodel->add_PRremarks($data,$remarks,$date_added,$_SESSION['admin_user_ID']);
-	// 	if($remarks_result){
-	// 		echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-	// 		$this->enduser_details($data);
-	// 	}
-	// 	else{
-	// 		echo "<script type='text/javascript'>alert('Successfully Updated!'); </script>";
-	// 	}
-
-	// }
 ###################################################################################
 ###################################################################################
 ###################################################################################
@@ -339,7 +188,7 @@ class Admin_controller extends CI_Controller {
 				'username' => $verify[0]->username
 			);
 			$this->session->set_userdata($userdata);
-			if('1' == $verify[0]->user_type_ID ){ #BAC(user type: ADMIN)
+			if('1' == $verify[0]->user_type_ID ){ 
 				$verify = $this->docutrackingmodel->adlogin($username,$password);
 				if(isset($verify)){
 					$userdata = array( 
@@ -352,11 +201,14 @@ class Admin_controller extends CI_Controller {
 					);
 				}
 				$this->session->set_userdata($userdata);
-				if('1' == $verify[0]->admin_office_ID && '1' == $verify[0]->user_type_ID ){
+				if('1' == $verify[0]->admin_office_ID && '1' == $verify[0]->user_type_ID ){ //BAC
 					echo "<script type='text/javascript'>alert('BAC!');  window.location.href = 'http://localhost/docutracking/bac'; </script>";
 				}
-				if('2' == $verify[0]->admin_office_ID && '1' == $verify[0]->user_type_ID){
+				if('2' == $verify[0]->admin_office_ID && '1' == $verify[0]->user_type_ID){ //PROC
 					echo "<script type='text/javascript'>alert('PROC!');  window.location.href = 'http://localhost/docutracking/procurement'; </script>";
+				}
+				if('3' == $verify[0]->admin_office_ID && '1' == $verify[0]->user_type_ID){ // OP
+					echo "<script type='text/javascript'>alert('OP!');  window.location.href = 'http://localhost/docutracking/officeOfThePresident'; </script>";
 				}
 				
 			}
@@ -391,36 +243,96 @@ class Admin_controller extends CI_Controller {
 		$projdesc = $this->input->post('projdesc');
 		$newQR = $this->docutrackingmodel->newQR();
 		$date_added = date('Y-m-d H:i:s T', time());
-		$this->docutrackingmodel->addPR_route1($newQR);
-		$this->docutrackingmodel->addPR_details($newQR,$projname,$projdesc, $_SESSION['end_user_ID'],$date_added);
+		$this->docutrackingmodel->addPR_route1($newQR); //add first routee (BAC) to route per scanned
+		$this->docutrackingmodel->addPR_details($newQR,$projname,$projdesc, $_SESSION['end_user_ID'],$date_added); //add details to document table
 		echo "<script type='text/javascript'>alert('Successfully Added!'); </script>";
 		redirect('enduser', 'refresh');
 
 	}
 
 	#READ PR details of scanned PR
-	public function scanPR(){
-		$bona = $_POST['scanPR'];
-		$data['prinfo'] = $this->docutrackingmodel->scanned_PRdetails($bona);
-		$lyle = $this->docutrackingmodel->func1($bona);
+	public function bac_scanPR(){
+		// $bona = $_POST['scanPR'];
+		$data['prinfo'] = $this->docutrackingmodel->scanned_PRdetails($this->input->post('scanPR'));
+		// $lyle = $this->docutrackingmodel->func1($bona);
 		if($data['prinfo']['result']== 0){
 			echo "<script type='text/javascript'>alert('No Data Found!');</script>";
 			redirect('bac', 'refresh');
 		}
 		else{
-			$this->docutrackingmodel->update_scannedPR($this->input->post('scanPR'),$_SESSION["admin_user_ID"],$_SESSION["admin_office_ID"]);
-			$data['bacpending'] = $this->docutrackingmodel->bac_pending(); 
-			$data['procpending'] = $this->docutrackingmodel->proc_pending();
-			$data['bacongoing'] = $this->docutrackingmodel->bac_ongoing(); 
-			$data['procongoing'] = $this->docutrackingmodel->proc_ongoing(); 
-			$data['pr_done'] = $this->docutrackingmodel->PRdone();
-			$this->load->view('bac/nav');
-			$this->load->view('bac/bac',$data);
+			$sequence = $this->docutrackingmodel->checkSequence($this->input->post('scanPR'));
+			// $sequence+1 to get the next location 
+
+			if(($sequence+1) == $_SESSION["admin_office_ID"]){
+				$this->docutrackingmodel->update_scannedPR($this->input->post('scanPR'),$_SESSION["admin_user_ID"],$_SESSION["admin_office_ID"]);
+				$data['bacpending'] = $this->docutrackingmodel->bac_pending(); 
+				$data['procpending'] = $this->docutrackingmodel->proc_pending();
+				$data['bacongoing'] = $this->docutrackingmodel->bac_ongoing(); 
+				$data['procongoing'] = $this->docutrackingmodel->proc_ongoing(); 
+				$data['pr_done'] = $this->docutrackingmodel->PRdone(); 
+				// 
+				echo "<script type='text/javascript'>alert('Scanned Successfully at BAC Office!!'); </script>";				
+				$this->load->view('bac/nav');
+				$this->load->view('bac/bac_qr',$data);
+				$this->load->view('footer_home');
+			}
+			else{
+				if($sequence == NULL){
+					// add here notificaion for bac
+					$wrongSeq = 'Wrong Sequence';
+					$result = $this->docutrackingmodel->bac_addNotif($this->input->post('scanPR'),$wrongSeq,$_SESSION["admin_office_ID"]);
+					if($result){
+						echo "<script type='text/javascript'>alert('Wrong Sequence! Return to BAC Office!!'); </script>";
+						redirect('bac', 'refresh');
+					}
+					else{
+						echo "<script type='text/javascript'>alert('ERROR!!'); </script>";		
+						redirect('bac', 'refresh');
+					}
+				}
+				else{
+					$wrongSeq = 'Wrong Sequence';
+					$result = $this->docutrackingmodel->bac_addNotif($this->input->post('scanPR'),$wrongSeq,$_SESSION["admin_office_ID"]);
+					echo "<script type='text/javascript'>alert('Wrong Sequence! Return to previous office!!'); </script>";
+					redirect('bac', 'refresh');
+				}
+				//dagdag sa notif database
+				// kung anong PR ung mali, at kung nakaninong office
+			}
+			
 		}
 	}
-	public function func1(){
-		$lyle = $this->docutrackingmodel->func1();
-		$madelind = $this->docutrackingmodel->func2($lyle[0]->ad_id, $lyle[0]->mo_id);
+
+	# NOTIFICATION
+	public function notification(){
+		if(isset($_POST['view'])){
+			if($_POST["view"] != ''){
+			    $this->docutrackingmodel->update_notif();
+			}
+		$result = $this->docutrackingmodel->readNotif();
+		$output = '';
+		if($result > 0){
+		 	foreach($result as $key){
+		   		$output .= '
+		   		<li>
+		   		<a href="#">
+		   		<strong>'.$key->message_subject.'</strong><br />
+		   		<small><em>'.$key->message_description.'</em></small>
+		   		</a>
+		   		</li>';
+		 	}
+		}
+		else{
+		    $output .= '
+		    <li><a href="#" class="text-bold text-italic">No Notification Found</a></li>';
+		}
+		$count = $this->docutrackingmodel->checkNotif();
+		$data = array(
+		    'notification' => $output,
+		    'unseen_notification'  => $count[0]->unseenNotif
+		);
+		echo json_encode($data);
+		}
 	}
 }
 ?>

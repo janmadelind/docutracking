@@ -159,7 +159,7 @@
                                                                     </div>
                                                                     <div class="modal-body">
                                                                     <?php echo form_open("Procurement_controller/proc_addPR_oldbidders/$key->PR_No");?> 
-                                                                        <select class="form-control show-tick" name ="bidder">
+                                                                        <select  name ="bidder">
                                                                         <?php 
                                                                             foreach($allbidders as $key){
                                                                                 echo '<option  value="'.$key->bidders_ID.'">'.$key->bidders_name.'</option>';
@@ -361,3 +361,59 @@
             <!-- #END# Example Tab -->
         </div>
     </section>
+    
+
+
+    <!-- Jquery Core Js -->
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/jquery/jquery.min.js');?>"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/bootstrap/js/bootstrap.js');?>"></script>
+
+    <!-- Select Plugin Js -->
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/bootstrap-select/js/bootstrap-select.js');?>"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/jquery-slimscroll/jquery.slimscroll.js');?>"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/node-waves/waves.js');?>"></script>
+
+    <!-- Jquery CountTo Plugin Js -->
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/jquery-countto/jquery.countTo.js');?>"></script>
+
+    <!-- Morris Plugin Js -->
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/raphael/raphael.min.js');?>"></script>
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/morrisjs/morris.js');?>"></script>
+
+    <!-- ChartJs -->
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/chartjs/Chart.bundle.js');?>"></script>
+
+    <!-- Flot Charts Plugin Js -->
+   <!--  <script type="text/javascript"  src="<?php echo base_url('assets/plugins/flot-charts/jquery.flot.js');?>"></script>
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/flot-charts/jquery.flot.resize.js');?>"></script>
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/flot-charts/jquery.flot.pie.js');?>"></script>
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/flot-charts/jquery.flot.categories.js');?>"></script>
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/flot-charts/jquery.flot.time.js');?>"></script>
+ -->
+    <!-- Sparkline Chart Plugin Js -->
+    <script type="text/javascript"  src="<?php echo base_url('assets/plugins/jquery-sparkline/jquery.sparkline.js');?>"></script>
+
+    <!-- Custom Js -->
+    <script type="text/javascript"  src="<?php echo base_url('assets/js/admin.js');?>"></script>
+    <!-- <script type="text/javascript"  src="<?php echo base_url('assets/js/pages/index.js');?>"></script> -->
+
+    <!-- Demo Js -->
+    <script type="text/javascript"  src="<?php echo base_url('assets/js/demo.js');?>"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            setInterval(function(){console.log("hey");},1000);
+            // function hey(){
+            //     console.log("HEY");
+            // }
+        });
+
+    </script>
+</body>
+
+</html>

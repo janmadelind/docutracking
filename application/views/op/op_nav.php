@@ -18,9 +18,6 @@
 
     <!-- Waves Effect Css -->
     <link href="<?php echo base_url('assets/plugins/node-waves/waves.css');?>" rel="stylesheet" />
-    
-    <!-- Bootstrap Select Css -->
-    <link href="<?php echo base_url('assets/plugins/bootstrap-select/css/bootstrap-select.css');?>" rel="stylesheet" />
 
     <!-- Animation Css -->
     <link href="<?php echo base_url('assets/plugins/animate-css/animate.css');?>" rel="stylesheet" />
@@ -28,15 +25,15 @@
     <!-- Morris Chart Css-->
     <link href="<?php echo base_url('assets/plugins/morrisjs/morris.css');?>" rel="stylesheet" />
 
+    <!-- Bootstrap Select Css -->
+    <link href="<?php echo base_url('assets/css/select.css');?>" rel="stylesheet">
+
     <!-- Custom Css -->
     <link href="<?php echo base_url('assets/css/style.css');?>" rel="stylesheet">
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="<?php echo base_url('assets/css/themes/all-themes.css');?>" rel="stylesheet" />
-    <script src="<?php echo base_url('assets/plugins/jquery/jquery.min.js'); ?>"></script>
-
 </head>
-
 
 <body class="theme-red">
     <!-- Page Loader -->
@@ -86,7 +83,7 @@
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
-                            <span class="label-count bg-red"></span>
+                            <span class="label-count bg-red">7</span>
                         </a>
                         
                     </li>
@@ -107,6 +104,7 @@
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
+                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
                             <li><a href="<?php echo site_url('Admin_controller/logout');?>"><i class="material-icons">input</i>Sign Out</a></li>
                         </ul>
                     </div>
