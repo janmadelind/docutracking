@@ -99,3 +99,7 @@
                     </div>
                 </div>
             </div>
+
+    <script type='text/javascript'>
+        $('#scanPR').modal('show');
+    </script>

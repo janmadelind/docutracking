@@ -5,9 +5,9 @@
             </div>
             <button type="button" class="btn bg-pink btn-lg waves-effect margin-down" data-toggle="modal" data-target="#scanPR">SCAN PR</button>
             <div class="dash-title">
-                <h6>Procurement</h6>
+                <h6>Office of the President</h6>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box-3 bg-red hover-zoom-effect">
                         <div class="icon">
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- #END# proc -->
         </div>
     </section>
@@ -80,7 +80,7 @@
                             <h4 class="modal-title" id="smallModalLabel">PR DETAILS</h4>
                         </div>
                         <div class="modal-body">
-                            <form action="<?php echo base_url('Procurement_controller/proc_scanPR')?>" method="post">
+                            <!-- <form action="<?php echo base_url('Procurement_controller/proc_scanPR')?>" method="post">
                                 <input type="text" name="scanPR" value="<?php echo $prinfo['PR_No']; ?>">
                                 <p><b>PR #</b> <?php echo $prinfo['PR_No']; ?></p>
                                 <p><b>Date Submitted:</b> <?php echo $prinfo['date_submitted']; ?></p>
@@ -91,7 +91,7 @@
                                 <p><b>College: </b> <?php echo $prinfo['college_name'];?> </p>
                                 <p><b>Department:</b> <?php echo $prinfo['department_name'];?>  </p>    
                                 <p><b>Date Scanned :</b><?php echo $prinfo['date_scanned']; ?></p>  
-                           </form>
+                           </form> -->
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>

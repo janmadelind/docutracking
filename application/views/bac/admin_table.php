@@ -6,7 +6,7 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                Purchase Requests
+                                <?php echo $title ?> Purchase Requests
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
@@ -29,9 +29,10 @@
                                             <th>PR#</th>
                                             <th>Date</th>
                                             <th>Description</th>
-                                            <th>Mode</th>
+                                            <th>Mode of Procurement</th>
                                             <th>Office Originated</th>
                                             <th>Amount</th>
+                                            <th>Status</th>                                            
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -40,9 +41,10 @@
                                             <th>PR#</th>
                                             <th>Date</th>
                                             <th>Description</th>
-                                            <th>Mode</th>
+                                            <th>Mode of Procurement</th>
                                             <th>Office Originated</th>
                                             <th>Amount</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </tfoot>
@@ -50,25 +52,64 @@
                                         <?php 
                                         if($readPR!=NULL){
                                             foreach ($readPR as $key) {
+                                            $dash = " - ";
+                                            if($key->mode_ID == 0  )
+                                            {
+                                                $key->mode_of_procurement ="None";
+                                                $dash = "";
+                                                $key->type_name ="";
+                                            }
                                        ?>
                                         <tr>
                                             <td><?php echo $key->PR_No?></td>
                                             <td><?php echo $key->date_submitted?></td>
                                             <td><?php echo $key->proj_description?></td>
-                                            <td><?php echo $key->mode_of_procurement?></td>
+                                            <td><?php echo $key->mode_of_procurement; echo $dash; echo $key->type_name?></td>
                                             <td><?php echo $key->college_name?> - <?php echo $key->department_name?> Department</td>
                                             <td><?php echo $key->amount?></td>
+                                            <td><?php echo $key->status?></td>
                                             <td>
                                                 <?php echo 
                                                     '<a class="btn bg-red waves-effect" href="'.site_url('Admin_controller/bac_details/'.$key->PR_No.'').'">'?>View Details </a>
+                                        
+                                                <?php echo 
+                                                    '<a class="btn bg-red waves-effect" data-toggle="modal" data-target="#status'.$key->PR_No.'">Update Status </a>';?>
                                             </td>
                                         </tr>
+                                        <?php  
+                                        echo '
+                                        <div class="modal fade" id="status'.$key->PR_No.'" tabindex="-1" role="dialog">'; ?>
+                                            <div class="modal-dialog modal-sm" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="smallModalLabel">PR DETAILS</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <?php echo form_open("Admin_controller/bac_addPR_status/$key->PR_No"); ?>
+                                                        Status:
+                                                        <select class="form-control show-tick" name= "status">
+                                                            <option value="status">Status</option>
+                                                            <option value="pending">Pending</option>
+                                                            <option value="approved">Approved</option>
+                                                            <option value="failed">Failed</option>
+                                                        </select>  
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <input class="btn bg-red waves-effect" type="submit" name="submit" value="UPDATE">
+                                                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                        <?php echo form_close();?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <?php 
+                                               
                                             }
                                         }
                                         ?>
                                     </tbody>
                                 </table>
+                                <a name="admintable"></a>
                             </div>
                         </div>
                     </div>
@@ -77,39 +118,4 @@
             <!-- #END# Exportable Table -->
         </div>
     </section>
-    
-    <!-- Jquery Core Js -->
-    <script src="<?php echo base_url('assets/plugins/jquery/jquery.min.js'); ?>"></script>
-
-    <!-- Bootstrap Core Js -->
-    <script src="<?php echo base_url('assets/plugins/bootstrap/js/bootstrap.js'); ?>"></script>
-
-    <!-- Select Plugin Js -->
-    <script src="<?php echo base_url('assets/plugins/bootstrap-select/js/bootstrap-select.js'); ?>"></script>
-
-    <!-- Slimscroll Plugin Js -->
-    <script src="<?php echo base_url('assets/plugins/jquery-slimscroll/jquery.slimscroll.js'); ?>"></script>
-
-    <!-- Waves Effect Plugin Js -->
-    <script src="<?php echo base_url('assets/plugins/node-waves/waves.js'); ?>"></script>
-
-    <!-- Jquery DataTable Plugin Js -->
-    <script src="<?php echo base_url('assets/plugins/jquery-datatable/jquery.dataTables.js'); ?>"></script>
-    <script src="<?php echo base_url('assets/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js'); ?>"></script>
-    <script src="<?php echo base_url('assets/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js'); ?>"></script>
-    <script src="<?php echo base_url('assets/plugins/jquery-datatable/extensions/export/buttons.flash.min.js'); ?>"></script>
-    <script src="<?php echo base_url('assets/plugins/jquery-datatable/extensions/export/jszip.min.js'); ?>"></script>
-    <script src="<?php echo base_url('assets/plugins/jquery-datatable/extensions/export/pdfmake.min.js'); ?>"></script>
-    <script src="<?php echo base_url('assets/plugins/jquery-datatable/extensions/export/vfs_fonts.js'); ?>"></script>
-    <script src="<?php echo base_url('assets/plugins/jquery-datatable/extensions/export/buttons.html5.min.js'); ?>"></script>
-    <script src="<?php echo base_url('assets/plugins/jquery-datatable/extensions/export/buttons.print.min.js'); ?>"></script>
-
-    <!-- Custom Js -->
-    <script src="<?php echo base_url('assets/js/admin.js'); ?>"></script>
-    <script src="<?php echo base_url('assets/js/pages/tables/jquery-datatable.js'); ?>"></script>
-
-    <!-- Demo Js -->
-    <script src="<?php echo base_url('assets/js/demo.js'); ?>"></script>
-</body>
-
-</html>
+        

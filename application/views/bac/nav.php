@@ -18,6 +18,9 @@
 
     <!-- Waves Effect Css -->
     <link href="<?php echo base_url('assets/plugins/node-waves/waves.css');?>" rel="stylesheet" />
+    
+    <!-- Bootstrap Select Css -->
+    <link href="<?php echo base_url('assets/plugins/bootstrap-select/css/bootstrap-select.css');?>" rel="stylesheet" />
 
     <!-- Animation Css -->
     <link href="<?php echo base_url('assets/plugins/animate-css/animate.css');?>" rel="stylesheet" />
@@ -30,6 +33,7 @@
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="<?php echo base_url('assets/css/themes/all-themes.css');?>" rel="stylesheet" />
+    <script src="<?php echo base_url('assets/plugins/jquery/jquery.min.js'); ?>"></script>
 </head>
 
 <body class="theme-red">
@@ -78,15 +82,19 @@
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Notifications -->
                     <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
-                            <span class="label-count bg-red">7</span>
+                            <span class="label-count bg-red " id="unseen_count"></span>
                         </a>
+                        <ul class="dropdown-menu" id="notif">
+                            
+                        </ul>
                         
                     </li>
                     <!-- #END# Notifications -->
                 </ul>
             </div>
+
         </div>
     </nav>
     <!-- #Top Bar -->
@@ -112,7 +120,7 @@
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active">
-                        <a href="<?php echo site_url('bac'); ?>">
+                        <a href="<?php echo site_url('bac'); ?>" >
                             <i class="material-icons">home</i>
                             <span>Home</span>
                         </a>
@@ -151,6 +159,12 @@
                             <i class="material-icons">add_alert</i>
                             <span>Notifications</span>
                         </a>
+                    </li>   
+                     <li>
+                        <a href="<?php echo site_url('bac'); ?>">
+                            <i class="material-icons">library_books</i>
+                            <span>Reports</span>
+                        </a>
                     </li>                
                 </ul>
             </div>
@@ -166,3 +180,41 @@
         <!-- #END# Left Sidebar -->
         <!-- Right Sidebar -->
     </section>
+     <script type="text/javascript">
+        $(document).ready(function(){
+            function load_unseen_notification(view = '')
+            {
+                $.ajax({
+                    url:"<?php echo site_url('Admin_controller/notification');?>",
+                    method:"POST",
+                    data:{view:view},
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        $('#notif').html(data.notification).delay(500);
+                        if(data.unseen_notification > 0)
+                        {
+                            $('#unseen_count').html(data.unseen_notification);
+                        }
+                        console.log(data.unseen_notification);
+                    },
+                    error:function(data){
+                        alert('ERROR!!')
+                        console.log(data.responseText);
+                }
+
+                });
+            }
+         
+            load_unseen_notification();
+            
+            $(document).on('click', '.dropdown-toggle', function(){
+                $('.count').html('');
+                load_unseen_notification('yes');
+            });
+         
+            setInterval(function(){ 
+                load_unseen_notification();; 
+            }, 5000);
+            });
+    </script>

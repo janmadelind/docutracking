@@ -89,22 +89,19 @@ class docutrackingmodel extends CI_Model {
 	##################################################################################################
 	##############################################BAC#################################################
 	##################################################################################################
-	#COUNT of BAC pending PR
+	#COUNT of BAC pending PR ++++++++ LYLE +++++++++++++
 	public function bac_pending(){
 		$query = $this->db->query(
-			"SELECT COUNT(DISTINCT PR_No) as bacpendingcount
-			FROM route_per_scanned 
-			WHERE (PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 1 ) 
-			AND PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 2 )
-			AND PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 6 )
-			AND PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 3 )
-			AND PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 7 ))
-			OR  admin_office_ID = 1 AND status_if_scanned = 'NS'
-
-			"
+			"SELECT COUNT(DISTINCT rps.PR_No) as bacpendingount			
+			FROM route_per_scanned rps
+			left JOIN document doc ON doc.PR_No = rps.PR_No
+			WHERE rps.PR_No != ALL (SELECT PR_No 
+			FROM route_per_scanned
+			WHERE admin_office_ID <=7 AND status_if_scanned = 'S')
+			AND doc.status != 'failed'"
 			);
 		if($query->num_rows() > 0){
-			return $query->result();
+			return $query->result()[0]->bacpendingount;
 		}
 		else{
 			return NULL;
@@ -113,9 +110,10 @@ class docutrackingmodel extends CI_Model {
 	#COUNT of BAC ongoing PR
 	public function bac_ongoing(){
 		$query = $this->db->query(
-			"SELECT COUNT(DISTINCT PR_No) as bacongoingcount
+			"SELECT COUNT(DISTINCT rps.PR_No) as bacongoingcount
 			FROM route_per_scanned rps
-			WHERE 
+			left JOIN document doc ON doc.PR_No = rps.PR_No
+			WHERE doc.status != 'failed' AND 
 			(
 				(
 					rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'S' AND admin_office_ID = 1 ) 
@@ -158,22 +156,17 @@ class docutrackingmodel extends CI_Model {
 		}
 	}
 	#READ BAC pending document details....................................
-	public function read_bacpending(){
+	public function read_bacpending(){ //all PR that have not been scanned
 		$query = $this->db->query (
-			"SELECT DISTINCT doc.*, mp.*,co.*,de.*
+			"SELECT DISTINCT doc.*, mp.*,co.*,de.*,tp.*
 			FROM route_per_scanned rps
-			INNER JOIN document doc ON doc.PR_No = rps.PR_No
-			INNER JOIN mode_of_procurement mp ON doc.mode_ID = mp.mode_ID
-			INNER JOIN end_user eu ON eu.end_user_ID = doc.end_user_ID
+			LEFT JOIN document doc ON doc.PR_No = rps.PR_No
+			LEFT JOIN mode_of_procurement mp ON doc.mode_ID = mp.mode_ID
+			LEFT JOIN type_of_pr tp ON doc.type_ID = tp.type_ID
+			LEFT JOIN end_user eu ON eu.end_user_ID = doc.end_user_ID
 			LEFT JOIN colleges co ON co.college_ID = eu.college_ID 
 			LEFT JOIN department de ON de.department_ID = eu.department_ID
-			WHERE (rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 1 ) 
-			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 2 )
-			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 6 )
-			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 3 )
-			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 7 ))
-			OR  rps.admin_office_ID = 1 AND rps.status_if_scanned = 'NS'
-			ORDER BY doc.PR_No ASC"
+			WHERE doc.status != 'failed' AND rps.status_if_scanned = 'NS' AND rps.admin_office_ID = 1 "
 		);
 		if($query->num_rows() > 0){
 			return $query->result();
@@ -185,14 +178,15 @@ class docutrackingmodel extends CI_Model {
 	#READ BAC pending document details....................................
 	public function read_bacongoing(){
 		$query = $this->db->query (
-			"SELECT DISTINCT doc.*, mp.*,co.*,de.*
+			"SELECT DISTINCT doc.*, mp.*,co.*,de.*,tp.*
 			FROM route_per_scanned rps
 			INNER JOIN document doc ON doc.PR_No = rps.PR_No
 			INNER JOIN mode_of_procurement mp ON doc.mode_ID = mp.mode_ID
+			INNER JOIN type_of_pr tp ON doc.type_ID = tp.type_ID
 			INNER JOIN end_user eu ON eu.end_user_ID = doc.end_user_ID
 			LEFT JOIN colleges co ON co.college_ID = eu.college_ID 
 			LEFT JOIN department de ON de.department_ID = eu.department_ID
-			WHERE
+			WHERE doc.status != 'failed' AND 
 			(
 				(
 					rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'S' AND admin_office_ID = 1 ) 
@@ -300,14 +294,16 @@ class docutrackingmodel extends CI_Model {
 	#READ PROC pending document details....................................
 	public function read_procpending(){
 		$query = $this->db->query (
-			"SELECT DISTINCT doc.*, mp.*,co.*,de.*
+			"SELECT DISTINCT doc.*, mp.*,co.*,de.*,tp.*
 			FROM route_per_scanned rps
 			INNER JOIN document doc ON doc.PR_No = rps.PR_No
 			INNER JOIN mode_of_procurement mp ON doc.mode_ID = mp.mode_ID
+			INNER JOIN type_of_pr tp ON doc.type_ID = tp.type_ID
 			INNER JOIN end_user eu ON eu.end_user_ID = doc.end_user_ID
 			LEFT JOIN colleges co ON co.college_ID = eu.college_ID 
 			LEFT JOIN department de ON de.department_ID = eu.department_ID
-			WHERE rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'S' AND admin_office_ID = 1 ) 
+			WHERE doc.status != 'failed' AND 
+			rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'S' AND admin_office_ID = 1 ) 
 			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 2 )
 			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 6 )
 			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 3 )
@@ -324,14 +320,15 @@ class docutrackingmodel extends CI_Model {
 	#READ PROC ongoing document details....................................
 	public function read_procongoing(){
 		$query = $this->db->query (
-			"SELECT DISTINCT doc.*, mp.*,co.*,de.*
+			"SELECT DISTINCT doc.*, mp.*,co.*,de.*,tp.*
 			FROM route_per_scanned rps
 			INNER JOIN document doc ON doc.PR_No = rps.PR_No
 			INNER JOIN mode_of_procurement mp ON doc.mode_ID = mp.mode_ID
+			INNER JOIN type_of_pr tp ON doc.type_ID = tp.type_ID
 			INNER JOIN end_user eu ON eu.end_user_ID = doc.end_user_ID
 			LEFT JOIN colleges co ON co.college_ID = eu.college_ID 
 			LEFT JOIN department de ON de.department_ID = eu.department_ID
-			WHERE
+			WHERE doc.status != 'failed' AND 
 			(
 				(	
 					rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'S' AND admin_office_ID = 1 ) 
@@ -378,7 +375,7 @@ class docutrackingmodel extends CI_Model {
 			FROM route_per_scanned
 			WHERE PR_No != ALL (SELECT PR_No 
 			FROM route_per_scanned
-			WHERE admin_office_ID <=3 AND status_if_scanned = 'NS')"
+			WHERE admin_office_ID <=7 AND status_if_scanned = 'NS')"
 			);
 		if($query->num_rows() > 0){
 			return $query->result();
@@ -390,9 +387,9 @@ class docutrackingmodel extends CI_Model {
 	#COUNT FAILED PR
 	public function PRfail(){
 		$query = $this->db->query(
-			"SELECT COUNT(DISTINCT PR_No)
+			"SELECT COUNT(DISTINCT PR_No) as prfail
 			FROM document
-			WHERE status = 'F'"
+			WHERE status = 'failed'"
 		);
 		if($query->num_rows() > 0){
 			return $query->result();
@@ -404,10 +401,11 @@ class docutrackingmodel extends CI_Model {
 	#READ PR details
 	public function read_PRdetails($prno){
 		$query = $this->db->query (
-			"SELECT doc.PR_No, doc.date_submitted,doc.proj_name, doc.proj_description,doc.ref_no, doc.amount, doc.mode_ID, eu.end_user_name, co.college_name, de.department_name, mp.mode_of_procurement
+			"SELECT doc.PR_No, doc.date_submitted,doc.proj_name, doc.proj_description,doc.ref_no, doc.amount, doc.mode_ID,doc.type_ID, eu.end_user_name, co.college_name, de.department_name, mp.mode_of_procurement, tp.type_name
 			FROM document doc
-			INNER JOIN mode_of_procurement mp ON mp.mode_ID = doc.mode_ID
-			INNER JOIN end_user eu ON eu.end_user_ID = doc.end_user_ID
+			LEFT JOIN mode_of_procurement mp ON mp.mode_ID = doc.mode_ID
+			LEFT JOIN type_of_pr tp ON tp.type_ID = doc.type_ID
+			LEFT JOIN end_user eu ON eu.end_user_ID = doc.end_user_ID
 			LEFT JOIN colleges co ON co.college_ID = eu.college_ID 
 			LEFT JOIN department de ON de.department_ID = eu.department_ID
 			WHERE  doc.PR_No = ".$prno." 
@@ -422,7 +420,7 @@ class docutrackingmodel extends CI_Model {
 	#READ bidders of PR
 	public function read_PRbidders($prno){
 		$query = $this->db->query (
-			"SELECT bt.amount, bd.bidders_name, bd.contact_no, bd.email 
+			"SELECT document.PR_No, bt.bidders_ID,bt.amount, bd.bidders_name, bd.contact_no, bd.email 
 			FROM bidder_transaction bt
 			INNER JOIN document ON document.PR_No = bt.PR_No
 			INNER JOIN bidders bd ON bd.bidders_ID = bt.bidders_ID
@@ -465,8 +463,17 @@ class docutrackingmodel extends CI_Model {
 		}
 	}
 
-	#INSERT bidders of PR
-	public function add_PRbidders($data,$bidders,$contact,$email){
+	#INSERT old bidders transac of PR
+	public function addPR_oldbidderstrans($data,$bidder,$amount,$date_added){
+		$query = $this->db->query (
+			"INSERT INTO bidder_transaction(PR_No,bidders_ID,amount,date_added)
+			VALUES('$data','$bidder','$amount','$date_added')
+			");
+		return $query;
+	}
+
+	#INSERT new bidders of PR
+	public function addPR_newbidders($data,$bidders,$contact,$email){
 		$query = $this->db->query (
 			"INSERT INTO bidders(bidders_name,contact_no,email)
 			VALUES('$bidders','$contact','$email')
@@ -474,8 +481,8 @@ class docutrackingmodel extends CI_Model {
 		return $query;
 	}
 
-	#INSERT bidders of PR
-	public function add_PRbidderstrans($data,$bidderID,$amount,$date_added){
+	#INSERT new bidder transaction of PR
+	public function addPR_newbidderstrans($data,$bidderID,$amount,$date_added){
 		$query = $this->db->query (
 			"INSERT INTO bidder_transaction(PR_No,bidders_ID,amount,date_added)
 			VALUES('$data','$bidderID','$amount','$date_added')
@@ -520,7 +527,7 @@ class docutrackingmodel extends CI_Model {
 	}
 
 
-	#READ ALL PR done in process
+	#READ ALL PR done in process +++++++++++++++++ LYLE+++++++++++++++++++++++
 	public function read_PRdone(){
 		$query = $this->db->query ("
 			SELECT DISTINCT doc.PR_No, doc.date_submitted, doc.proj_description, mp.mode_of_procurement,doc.ref_no, doc.amount
@@ -531,6 +538,27 @@ class docutrackingmodel extends CI_Model {
 			FROM route_per_scanned
 			WHERE admin_office_ID <=3 AND status_if_scanned = 'NS')
 			ORDER BY doc.PR_No ASC
+		");
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+ 	}
+
+ 	#READ ALL PR done in process
+	public function readPR_failed(){
+		$query = $this->db->query ("
+			SELECT doc.status, doc.PR_No, doc.date_submitted,doc.proj_name, doc.proj_description,doc.ref_no, doc.amount, doc.mode_ID, eu.end_user_name, co.college_name, de.department_name, mp.mode_of_procurement, tp.type_name
+			FROM document doc
+			LEFT JOIN mode_of_procurement mp ON mp.mode_ID = doc.mode_ID
+			LEFT JOIN type_of_pr tp ON tp.type_ID = doc.type_ID
+			INNER JOIN end_user eu ON eu.end_user_ID = doc.end_user_ID
+			LEFT JOIN colleges co ON co.college_ID = eu.college_ID 
+			LEFT JOIN department de ON de.department_ID = eu.department_ID
+			WHERE status = 'failed'
+			ORDER BY PR_No ASC
 		");
 		if($query->num_rows() > 0){
 			return $query->result();
@@ -575,55 +603,74 @@ class docutrackingmodel extends CI_Model {
 		else{
 			$t['PR_No'] = $try->PR_No;
 			$t['date_submitted'] = $try->date_submitted;
-			$t['date_scanned'] = date('Y-m-d H:i:s T', time());;
+			$t['date_scanned'] = date('Y-m-d H:i:s T');
 			$t['proj_description'] = $try->proj_description;
+			$t['proj_name'] = $try->proj_name;
 			$t['ref_no'] = $try->ref_no;
+			$t['department_name'] = $try->department_name;
+			$t['college_name'] = $try->college_name;
 			$t['amount'] = $try->amount;
+			$t['end_user_name'] = $try->end_user_name;
 			$t['result'] = 1;
 		}
 		return $t;
 	}
 	#UPDATE details of scanned PR 
 	public function update_scannedPR($prno,$scanned_by,$scanned_where){
-		$date_scanned = date('Y-m-d H:i:s T', time());
-		$this->db->query (
+		$date_scanned = date('Y-m-d H:i:s T');
+		$query = $this->db->query (
 			"UPDATE route_per_scanned
 			SET admin_user_ID = '$scanned_by', date_scanned = '$date_scanned', status_if_scanned = 'S'
 			WHERE PR_No = '$prno' AND admin_office_ID = '$scanned_where'"
 		);
+		return $query;
 	}
 
-	#ADD mode of PR 
-	public function addPR_mode($mode,$prno){
-		$this->db->query (
+	#ADD status of PR 
+	public function addPR_status($status,$prno){
+		$query = $this->db->query (
 			"UPDATE document
-			SET mode_ID = '$mode'
+			SET status = '$status'
 			WHERE PR_No = '$prno'"
 		);
+		return $query;
+	}
+
+	#ADD mode and type of PR 
+	public function addPR_modetype($mode,$type,$prno){
+		$query = $this->db->query (
+			"UPDATE document
+			SET mode_ID = '$mode', type_ID = '$type'
+			WHERE PR_No = '$prno'"
+		);
+		return $query;
 	}
 	#ADD new PR into Route
 	public function addPR_route1($prno){
-		$this->db->query (
+		$query = $this->db->query (
 			"INSERT INTO route_per_scanned(PR_No,admin_office_ID)
 			VALUE ('$prno','1')"
 		);
+		return $query;
 	}
 	#ADD new PR info to documetn table
 	public function addPR_details($prno,$projname,$projdesc,$submitted_by,$date_added){
-		$this->db->query (
+		$query = $this->db->query (
 			"INSERT INTO document(PR_No,proj_name,proj_description,end_user_ID,date_submitted)
 			VALUE ('$prno','$projname','$projdesc','$submitted_by','$date_added')"
 		);
+		return $query;
 	}
 	#ADD sequence in route_per_scanned
-	public function addPR_seq($modeID,$prno){
-		$this->db->query (
+	public function addPR_seq($modeID,$type,$prno){
+		$query = $this->db->query (
 			"INSERT INTO route_per_scanned (PR_No, admin_office_ID)
 			SELECT doc.PR_No, fr.admin_office_ID
 			FROM document doc
 			INNER JOIN fixed_route fr ON doc.mode_ID= fr.mode_ID
-			WHERE fr.mode_ID = '$modeID'  AND doc.PR_No = '$prno'"
+			WHERE fr.mode_ID = '$modeID' AND fr.type_ID = '$type'  AND doc.PR_No = '$prno'"
 		);
+		return $query;
 	}
 	##################################################################################################
 	############################################END USER##############################################
@@ -645,6 +692,24 @@ class docutrackingmodel extends CI_Model {
 			return NULL;
 		}
 	}
+
+	#COUNT PR submitted by END USER
+	public function countPR_eu($id){
+		$query = $this->db->query (
+			"SELECT COUNT(DISTINCT docu.PR_No) as prsubmitted
+ 			FROM document docu
+			LEFT JOIN mode_of_procurement mp ON docu.mode_ID = mp.mode_ID
+			LEFT JOIN end_user eu ON docu.end_user_ID = eu.end_user_ID
+			WHERE docu.end_user_ID = '$id'"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+
 	#COUNT all done PR submitted by END USER
 	public function PRdone_eu($id){
 		$query = $this->db->query (
@@ -675,11 +740,10 @@ class docutrackingmodel extends CI_Model {
 			INNER JOIN end_user eu ON doc.end_user_ID = eu.end_user_ID
 			INNER JOIN mode_of_procurement mp ON doc.mode_ID = mp.mode_ID 
 			WHERE doc.end_user_ID = '$id' 
-			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 1 ) 
-			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 2 )
-			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 6 )
-			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 3 )
-			AND rps.PR_No IN (Select PR_No From route_per_scanned where status_if_scanned = 'NS' AND admin_office_ID = 7 )
+			AND rps.PR_No != ALL (SELECT PR_No 
+			FROM route_per_scanned
+			WHERE admin_office_ID <=7 AND status_if_scanned = 'S')
+			AND doc.status != 'failed' 
 			ORDER BY doc.PR_No ASC"
 		);
 		if($query->num_rows() > 0){
@@ -838,6 +902,142 @@ class docutrackingmodel extends CI_Model {
 		else{
 			return NULL;
 		}
+	}
+	// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	
+
+	public function getMode($prno){
+		$query = $this->db->query (
+			"SELECT mp.*
+			FROM mode_of_procurement mp
+			INNER JOIN document doc ON doc.mode_ID = mp.mode_ID
+			WHERE doc.PR_No = '$prno'
+			ORDER BY doc.PR_No ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result()[0]->admin_office_ID;
+		}
+		else{
+			return NULL;
+		}
+	}
+
+	public function checkSequence($prno){
+		$query = $this->db->query (
+			"SELECT admin_office_ID
+			FROM fixed_route fr
+			WHERE fr.sequence = (SELECT count(status_if_scanned)
+			FROM route_per_scanned
+			WHERE PR_No = '$prno' AND status_if_scanned = 'S') 
+			AND fr.mode_ID = (SELECT mode_ID FROM document WHERE PR_No = '$prno')
+			AND fr.type_ID = (SELECT type_ID FROM document WHERE PR_No = '$prno')
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result()[0]->admin_office_ID;
+		}
+		else{
+			return NULL;
+		}
+	}
+	public function getLoc($officeID){
+		$query = $this->db->query (
+			"SELECT admin_office_id, admin_office_name
+			FROM admin_office
+			WHERE admin_office_ID = '$officeID'
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result()[0]->admin_office_name;
+		}
+		else{
+			return NULL;
+		}
+	}
+
+	public function checkSequence2($officeID, $prno){
+		$query = $this->db->query (
+			"SELECT af.admin_office_name
+			FROM route_per_scanned rps
+			INNER JOIN admin_office af
+			WHERE rps.admin_office_ID = $officeID AND rps.PR_No = '$prno' AND rps.status_if_scanned = 'NS'
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result()[0]->admin_office_name;
+		}
+		else{
+			return NULL;
+		}
+	}
+	
+	// INSERT notif BAC
+	public function bac_addNotif($prno,$subj,$officeID){
+		$message_description = concat("PR ","$prno","did not went to proper office");
+		$officeName = $this->db->query ("SELECT admin_office_name FROM admin_office WHERE admin_office_ID = '$officeID';");
+		$query = $this->db->query (
+			"INSERT INTO notification(PR_No, message_subject, message_description,admin_office_ID)
+			VALUES ('$prno', '$subj', '$message_description', '$officeID')
+			"
+		);
+		return $query;
+	}
+	// INSERT notif PROC
+	public function proc_addNotif($prno,$subj,$officeID){
+		$message_description = "PR $prno"." did not went to BAC office";
+		$officeName = $this->db->query ("SELECT admin_office_name FROM admin_office WHERE admin_office_ID = '$officeID';");
+		$query = $this->db->query (
+			"INSERT IGNORE INTO notification(PR_No, message_subject, message_description,admin_office_ID)
+			VALUES ('$prno', '$subj', '$message_description', '$officeID')
+			"
+		);
+		return $query;
+	}
+
+	//READ all NOTIF
+	public function readNotif(){
+		$query = $this->db->query (
+			"SELECT *
+			FROM notification
+			WHERE status = 'NS'
+			ORDER BY created_at"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+
+	//COUNT all NOTIF
+	public function checkNotif(){
+		$query = $this->db->query (
+			"SELECT COUNT(*) as unseenNotif
+			FROM notification
+			WHERE status = 'NS'"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	public function update_notif(){
+		$query = $this->db->query (
+			"UPDATE notification 
+			SET status = 'S'
+			WHERE status = 'NS'
+			"
+		);
+		return $query;
 	}
 }
 ?>
