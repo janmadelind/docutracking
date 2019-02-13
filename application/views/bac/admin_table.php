@@ -88,11 +88,11 @@
                                                         <?php echo form_open("Admin_controller/bac_addPR_status/$key->PR_No"); ?>
                                                         Status:
                                                         <select class="form-control show-tick" name= "status">
-                                                            <option value="status">Status</option>
                                                             <option value="pending">Pending</option>
                                                             <option value="approved">Approved</option>
                                                             <option value="failed">Failed</option>
-                                                        </select>  
+                                                        </select> 
+
                                                     </div>
                                                     <div class="modal-footer">
                                                         <input class="btn bg-red waves-effect" type="submit" name="submit" value="UPDATE">
@@ -118,4 +118,3 @@
             <!-- #END# Exportable Table -->
         </div>
     </section>
-        

@@ -33,6 +33,8 @@
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="<?php echo base_url('assets/css/themes/all-themes.css');?>" rel="stylesheet" />
+    <script src="<?php echo base_url('assets/plugins/jquery/jquery.min.js'); ?>"></script>
+
 </head>
 
 <body class="theme-red">
@@ -81,10 +83,13 @@
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Notifications -->
                     <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
-                            <span class="label-count bg-red">7</span>
+                            <span class="label-count bg-red " id="unseen_count"></span>
                         </a>
+                        <ul class="dropdown-menu" id="notif" style="height: 200px; width: 300px; overflow-y: scroll">
+                            
+                        </ul>
                         
                     </li>
                     <!-- #END# Notifications -->
@@ -104,8 +109,7 @@
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
-                            <li><a href="<?php echo site_url('Admin_controller/logout');?>"><i class="material-icons">input</i>Sign Out</a></li>
+                            <li><a href="<?php echo base_url('Admin_controller/logout');?>"><i class="material-icons">input</i>Sign Out</a></li>
                         </ul>
                     </div>
                 </div>
@@ -116,9 +120,9 @@
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active">
-                        <a href="<?php echo site_url('procurement'); ?>">
-                            <i class="material-icons">home</i>
-                            <span>Home</span>
+                        <a href="<?php echo base_url('officeOfThePresident'); ?>">
+                            <i class="material-icons col-grey">home</i>
+                            <span class="col-grey">Home</span>
                         </a>
                     </li>
                     <li>
@@ -126,36 +130,35 @@
                             <i class="material-icons">content_paste</i>
                             <span>Purchase Requests</span>
                         </a> 
-                        <ul class="ml-menu">
+                        <ul class="ml-menu">                            
                             <li>
-                                <a href="<?php echo site_url('procurement_table_pending'); ?>">
-                                    <span>Pending</span>
-                                    <!-- <span class="badge bg-red" style="color: #fff;">18 new</span> -->
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<?php echo site_url('procurement_table_ongoing'); ?>">
+                                <a href="<?php echo base_url('op_table_ongoing'); ?>">
                                     <span>Ongoing</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="<?php echo site_url('procurement_table_done'); ?>">
-                                    <span>Done</span>
+                                <a href="<?php echo base_url('op_table_done'); ?>">
+                                    <span>Approved</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="<?php echo site_url('procurement_table_failed'); ?>">
+                                <a href="<?php echo base_url('op_table_failed'); ?>">
                                     <span>Failed</span>
                                 </a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a href="<?php echo site_url('procurement_notif'); ?>">
+                        <a href="<?php echo base_url('op_notif'); ?>">
                             <i class="material-icons">add_alert</i>
                             <span>Notifications</span>
                         </a>
-                    </li>                
+                    <!-- </li>           
+                        <a href="<?php echo base_url('op_reports'); ?>">
+                            <i class="material-icons">library_books</i>
+                            <span>Reports</span>
+                        </a>
+                    </li>    -->  
                 </ul>
             </div>
             <!-- #Menu -->
@@ -170,3 +173,44 @@
         <!-- #END# Left Sidebar -->
         <!-- Right Sidebar -->
     </section>
+ <script type="text/javascript">
+        $(document).ready(function(){
+            function load_unseen_notification(view = '')
+            {
+                $.ajax({
+                    url:"<?php echo base_url('Oo_controller/notification');?>",
+                    method:"POST",
+                    data:{view:view},
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        $('#notif').html(data.notification);
+                        // $('#notif').delay(500);
+                        if(data.unseen_notification > 0)
+                        {
+                            $('#unseen_count').html(data.unseen_notification);
+                        }
+                        else{
+                            $('#unseen_count').html();
+                        }
+                        console.log(data.unseen_notification);
+                    },
+                    error:function(data){
+                        console.log(data.responseText);
+                }
+
+                });
+            }
+         
+            load_unseen_notification();
+            
+            $(document).on('click', '.dropdown-toggle', function(){
+                $('.count').html('');
+                load_unseen_notification('yes');
+            });
+         
+            setInterval(function(){ 
+                load_unseen_notification();; 
+            }, 5000);
+            });
+    </script>

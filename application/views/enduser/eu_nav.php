@@ -30,6 +30,7 @@
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="<?php echo base_url('assets/css/themes/all-themes.css');?>" rel="stylesheet" />
+    <script src="<?php echo base_url('assets/plugins/jquery/jquery.min.js'); ?>"></script>
 </head>
 
 <body class="theme-red">
@@ -65,7 +66,7 @@
     </div>
     <!-- #END# Search Bar -->
     <!-- Top Bar -->
-    <nav class="navbar bg-black">
+    <nav class="navbar bg-black noprint">
         <div class="container-fluid">
             
             <div class="navbar-header">
@@ -78,111 +79,14 @@
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Notifications -->
                     <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
-                            <span class="label-count bg-red">7</span>
+                            <span class="label-count bg-red " id="unseen_count"></span>
                         </a>
-                       <!--  <ul class="dropdown-menu">
-                            <li class="header">NOTIFICATIONS</li>
-                            <li class="body">
-                                <ul class="menu">
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-light-green">
-                                                <i class="material-icons">person_add</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4>12 new members joined</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> 14 mins ago
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li> 
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-cyan">
-                                                <i class="material-icons">add_shopping_cart</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4>4 sales made</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> 22 mins ago
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-red">
-                                                <i class="material-icons">delete_forever</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4><b>Nancy Doe</b> deleted account</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> 3 hours ago
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-orange">
-                                                <i class="material-icons">mode_edit</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4><b>Nancy</b> changed name</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> 2 hours ago
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-blue-grey">
-                                                <i class="material-icons">comment</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4><b>John</b> commented your post</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> 4 hours ago
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-light-green">
-                                                <i class="material-icons">cached</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4><b>John</b> updated status</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> 3 hours ago
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-purple">
-                                                <i class="material-icons">settings</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4>Settings updated</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> Yesterday
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="footer">
-                                <a href="<?php echo site_url('bac_notif'); ?>">View All Notifications</a>
-                            </li>
-                        </ul> -->
+                        <ul class="dropdown-menu" id="notif" style="height: 500px; width: 300px; overflow-y: scroll">
+                            
+                        </ul>
+                        
                     </li>
                     <!-- #END# Notifications -->
                 </ul>
@@ -192,12 +96,12 @@
     <!-- #Top Bar -->
     <section>
         <!-- Left Sidebar -->
-        <aside id="leftsidebar" class="sidebar">
+        <aside id="leftsidebar" class="sidebar noprint">
             <!-- User Info -->
             <div class="user-info">
                 <div class="info-container">
                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $this->session->userdata['end_user_name']; ?></div>
-                    <div class="name"><?php echo $this->session->userdata['college_name']; ?> <br> <?php echo $this->session->userdata['department_name']; ?></div>
+                    <div class="name"><?php echo $this->session->userdata['college_name']; ?> <br> <?php echo $this->session->userdata['department_name']; ?> Department</div>
 <!--                     <div class="email">john.doe@example.com</div> -->
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
@@ -214,8 +118,8 @@
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active">
                         <a href="<?php echo site_url('enduser'); ?>">
-                            <i class="material-icons">home</i>
-                            <span>Home</span>
+                            <i class="material-icons col-grey">home</i>
+                            <span class="col-grey">Home</span>
                         </a>
                     </li>
                     <li>
@@ -231,19 +135,13 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="<?php echo site_url('enduser_table_pending'); ?>">
-                                    <span>Pending</span>
-                                    <!-- <span class="badge bg-red" style="color: #fff;">18 new</span> -->
-                                </a>
-                            </li>
-                            <li>
                                 <a href="<?php echo site_url('enduser_table_ongoing'); ?>">
                                     <span>Ongoing</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="<?php echo site_url('enduser_table_done'); ?>">
-                                    <span>Done</span>
+                                    <span>Approved</span>
                                 </a>
                             </li>
                             <li>
@@ -273,3 +171,45 @@
         <!-- #END# Left Sidebar -->
         <!-- Right Sidebar -->
     </section>
+<script type="text/javascript">
+        $(document).ready(function(){
+            function load_unseen_notification(view = '')
+            {
+                $.ajax({
+                    url:"<?php echo site_url('Enduser_controller/notification');?>",
+                    method:"POST",
+                    data:{view:view},
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        $('#notif').html(data.notification);
+                        // $('#notif').delay(10);
+                        if(data.unseen_notification > 0)
+                        {
+                            $('#unseen_count').html(data.unseen_notification);
+                        }
+                        else{
+                            $('#unseen_count').html();
+                        }
+                        console.log(data.unseen_notification);
+                    },
+                    error:function(data){
+                        console.log(data.responseText);
+                    }
+                });
+            }
+         
+            load_unseen_notification();
+            
+            $(document).on('click', '.dropdown-toggle', function(){
+                $('.count').html('');
+                load_unseen_notification('yes');
+            });
+         
+            setInterval(function(){ 
+                load_unseen_notification();; 
+            }, 1000);
+            
+        });
+
+    </script>
