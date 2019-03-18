@@ -9,6 +9,7 @@
                                 <li role="presentation"><a href="#bidders" data-toggle="tab"><i class="material-icons">assignment_ind</i> Bidders</a></li>
                                 <li role="presentation"><a href="#files" data-toggle="tab"><i class="material-icons">attach_file</i> Attached Files</a></li>
                                 <li role="presentation"><a href="#remarks" data-toggle="tab"><i class="material-icons">comment</i> Remarks</a></li>
+                                <li role="presentation"><a href="#histo" data-toggle="tab"><i class="material-icons">library_books</i> Histogram</a></li>
                             </ul>
 
                             <!-- Tab panes -->
@@ -25,8 +26,9 @@
                                                 $key->type_name ="";
                                             }
                                             
-                                    ?>                                    
-                                    <!-- ADD PR MODE -->
+                                    ?>      
+                                    
+                                    <!-- ADD/UPDATE PR MODE -->
                                         <?php
                                         if ($prdetails[0]->mode_ID == 0){?>
                                         <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#mode<?php echo $key->PR_No?>"><i class="material-icons">library_add</i><span>ADD MODE</span></button>
@@ -40,7 +42,41 @@
                                                     <div class="modal-body">
                                                         <?php echo form_open("Admin_controller/bac_addPR_modetype/$key->PR_No");?>
                                                         <input type="radio" name="mode[]" id="Small_Value" value="1" ><label for="Small_Value">Small Value Shopping</label>
-                                                        <input type="radio" name="mode[]" id="Negotiated" value="2"><label for="Negotiated">Lease of Real Property And Venue</label>
+                                                        <!-- <input type="radio" name="mode[]" id="Negotiated" value="2"><label for="Negotiated">Lease of Real Property And Venue</label> -->
+                                                        <input type="radio" name="mode[]" id="Shopping" value="3"><label for="Shopping">Shopping<label>
+                                                        <input type="radio" name="mode[]" id="Direct" value="4"><label for="Direct">Direct Contracting<label>
+                                                        <br>
+                                                        <div class="Small_Value">
+                                                            <input type="radio" name="type[]" id="food" value="1"><label for="food">Food</label><br>
+                                                            <input type="radio" name="type[]" id="Supplies" value="3"><label for="Supplies">Supplies and Materials</label><br>
+                                                            <!-- <input type="radio" name="type[]" id="Venue" value="2"><label for="Venue">Venue</label><br> -->
+                                                            <input type="radio" name="type[]" id="Equipment" value="4"><label for="Equipment">Equipment</label><br>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
+                                                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                        <?php echo form_close();?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <?php } 
+                                        else{ ?>
+                                        <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#upmode<?php echo $key->PR_No?>"><i class="material-icons">library_add</i><span>UPDATE MODE</span></button>
+                                        
+                                        <div class="modal fade" id="upmode<?php echo $key->PR_No?>" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog modal-sm" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="smallModalLabel">Select PR Mode</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <?php echo form_open("Admin_controller/bac_updatePR_modetype/$key->PR_No");?>
+                                                        <input type="radio" name="mode[]" id="Small_Value" value="1" ><label for="Small_Value">Small Value Shopping</label>
+                                                        <!-- <input type="radio" name="mode[]" id="Negotiated" value="2"><label for="Negotiated">Lease of Real Property And Venue</label> -->
                                                         <input type="radio" name="mode[]" id="Shopping" value="3"><label for="Shopping">Shopping<label>
                                                         <input type="radio" name="mode[]" id="Direct" value="4"><label for="Direct">Direct Contracting<label>
                                                         <br>
@@ -60,15 +96,107 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <br><br>
                                         <?php } ?>
-                                    <!-- ADD PR MODE -->
+                                    <!-- ADD/UPDATE PR MODE -->
                                     
-                                    <!-- ADD RESO OF MODE -->                                   
+                                    <!-- TO BE RETURNED -->
+                                        <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#qwe<?php echo $key->PR_No?>"><i class="material-icons">library_add</i><span>RETURN</span></button>
+                                        
+                                        <div class="modal fade" id="qwe<?php echo $key->PR_No?>" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog modal-sm" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="smallModalLabel">Select PR Destination</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <?php echo form_open("Admin_controller/bac_PR_return/$key->PR_No");?>
+                                                        <select class="form-control show-tick" name="destination">
+                                                            <option value="<?php echo $key->end_user_name?>"><?php echo $key->end_user_name?></option>
+                                                        </select>
+                                                        <br>
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                    <input type="text" class="form-control" name="remarks" required>
+                                                                    <label class="form-label">Remarks</label>
+                                                            </div>
+                                                        </div>                                                                                                                
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <input class="btn bg-red waves-effect" type="submit" name="submit" value="RETURN">
+                                                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                        <?php echo form_close();?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- TO BE RETURNED -->                                    
+
                                         <?php
-                                            if($prdetails[0]->type_ID == 1 OR $prdetails[0]->type_ID == 2){ 
-                                                if($prresomode == NULL){                                
+                                            if($prdetails[0]->type_ID == 1 OR $prdetails[0]->type_ID == 2){ ?>
+                                    <!-- ASSIGN DAYS(TYPE 1) -->
+                                            <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#datetime<?php echo $key->PR_No?><?php echo $prdetails[0]->type_ID?>"><i class="material-icons">library_add</i><span>Assign Deadline per office</span></button>
+                                            
+                                            <div class="modal fade" id="datetime<?php echo $key->PR_No?><?php echo $prdetails[0]->type_ID?>" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog modal-sm" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="smallModalLabel">PR deadline per Office(Days)</h4>
+                                                        </div>
+                                                        <?php echo form_open("Admin_controller/bac_addPR_duration1/$key->PR_No/$key->type_ID");?>
+                                                        <div class="modal-body">
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="bac" required> 
+                                                                        <label class="form-label">Bids and Awards Committee</label>
+                                                                </div>                                                        
+                                                            </div>                                                              
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="ico" required>
+                                                                        <label class="form-label">ICO</label>
+                                                                </div>
+                                                            </div>  
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="op" required>
+                                                                        <label class="form-label">Ofice of the President</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="bdgt" required>
+                                                                        <label class="form-label">Budget Office</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="acctg" required>
+                                                                        <label class="form-label">Accounting Office</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="cashier" required>
+                                                                        <label class="form-label">Cashier</label>
+                                                                </div>
+                                                            </div>  
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
+                                                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                        </div>
+                                                        <?php echo form_close(); ?> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <br>
+                                    <!-- ASSIGN DAYS(TYPE1) -->                                                                                
+
+                                            <?php if($prresomode == NULL){                                
                                         ?>
+                                    <!-- RESO MODE -->
+
                                             <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#reso1<?php echo $key->PR_No;?>"><i class="material-icons">library_add</i><span>ADD RESOLUTION FOR MODE</span></button>
                                             <div class="modal fade" id="reso1<?php echo $key->PR_No;?>" tabindex="-1" role="dialog">
                                                 <div class="modal-dialog modal-sm" role="document">
@@ -93,13 +221,80 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        <br><br>
+                                            <br><br>
+                                    <!-- RESO MODE -->                                                                                
+
                                         <?php
                                                 }
                                             }
+                                            else{
                                         ?>
-                                    <!-- ADD RESO OF MODE -->
-                                                                                                
+                                    <!-- ASSIGN DAYS-->
+                                            <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#datetime<?php echo $key->PR_No?><?php echo $key->type_ID?>"><i class="material-icons">library_add</i><span>Assign Deadline per office</span></button>
+                                            
+                                            <div class="modal fade" id="datetime<?php echo $key->PR_No?><?php echo $key->type_ID?>" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog modal-sm" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="smallModalLabel">PR deadline per Office(Days)</h4>
+                                                        </div>
+                                                        <?php echo form_open("Admin_controller/bac_addPR_duration/$key->PR_No/$key->type_ID");?>
+                                                        <div class="modal-body">
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="bac" required> 
+                                                                        <label class="form-label">Bids and Awards Committee</label>
+                                                                </div>                                                        
+                                                            </div>                                                              
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="proc" required>
+                                                                        <label class="form-label">Procurement Office</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="ico" required>
+                                                                        <label class="form-label">ICO</label>
+                                                                </div>
+                                                            </div>  
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="op" required>
+                                                                        <label class="form-label">Ofice of the President</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="bdgt" required>
+                                                                        <label class="form-label">Budget Office</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="acctg" required>
+                                                                        <label class="form-label">Accounting Office</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="cashier" required>
+                                                                        <label class="form-label">Cashier</label>
+                                                                </div>
+                                                            </div>  
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
+                                                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                        </div>
+                                                        <?php echo form_close(); ?> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <?php }?>
+                                    <!-- ASSIGN DAYS-->                                                                                                                                                                               
                                     <table>
                                         <tr>
                                             <td><p><b>PR #</b> </p></td>
@@ -114,10 +309,28 @@
                                             <td>
                                                 <p>  
                                                     <?php 
-                                                    if($prcurloc != NULL){                                                    
+                                                    if($return1 != NULL){                                                    
+                                                        foreach ($return1 as $ret1) { 
+                                                            if($ret1->end_user_name != NULL){ 
+                                                               echo $ret1->college_name." - ".$ret1->department_name ;
+                                                            } 
+                                                        }       
+                                                    }
+                                                    else if($prcurloc != NULL AND $return1 == NULL){                                                    
                                                         foreach ($prcurloc as $curloc) { 
-                                                            if($curloc->admin_office_ID != NULL){ 
+                                                            if($test != NULL && $curloc->admin_office_ID != NULL){ 
+                                                               echo "Returned to ".$curloc->admin_office_name;
+                                                            } 
+                                                            else{ 
                                                                echo $curloc->admin_office_name;
+                                                            } 
+
+                                                        }       
+                                                    }
+                                                    else if($return != NULL){                                                    
+                                                        foreach ($return as $ret) { 
+                                                            if($ret->admin_office_ID != NULL){ 
+                                                               echo $ret->admin_office_name;
                                                             } 
                                                         }       
                                                     }
@@ -144,7 +357,7 @@
                                         <tr>
                                             <td><p><b>College: </b> </p></td> 
                                             <td><p>  <?php echo $key->college_name?> </p></td>
-                                        </tr>
+                                        </tr> 
                                         <tr>
                                             <td><p><b>Department:</b> </p></td> 
                                             <td><p>  <?php echo $key->department_name?>  </p>  </td>
@@ -204,6 +417,10 @@
                                         <?php 
                                         }
                                         ?>
+                                        <tr>
+                                            <td><p><b>Alloted Day to process:</b> </p></td> 
+                                            <td><p> <?php echo $days?></p> </td>
+                                        </tr> 
                                     </table>
                                 </div>
                                 
@@ -279,7 +496,7 @@
                                                                             <label class="form-label">Amount (Php)</label>
                                                                         </div>
                                                                     </div>                                                          
-                                                            </div>
+                                                                </div>
                                                         <div class="modal-footer">
                                                             <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
                                                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -444,7 +661,7 @@
 
                                 
                                 <div role="tabpanel" class="tab-pane fade" id="files">
-                                    <div class="table-responsive">
+                                    <div style="overflow: none">
                                         <?php 
                                         if($prdetails != NULL){
                                             foreach ($prdetails as $key) {
@@ -478,7 +695,7 @@
                                         }
                                         ?>
                                         <br><br> 
-                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                        <table class="table table-bordered table-striped table-hover js-basic-example" >
                                            <thead>
                                                 <tr>
                                                     <th>Date Added</th>
@@ -507,7 +724,7 @@
                                 </div>
 
                                 <div role="tabpanel" class="tab-pane fade" id="remarks">
-                                    <div class="table-responsive">
+                                    <div style="overflow: none">
                                         <?php 
                                         if($prdetails != NULL){
                                             foreach ($prdetails as $key) {
@@ -542,7 +759,7 @@
                                         }
                                         ?>
                                         <br><br>
-                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                        <table class="table table-bordered table-striped table-hover js-basic-example ">
                                             <thead>
                                                 <tr>
                                                     <th>Date Added</th>
@@ -567,6 +784,49 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                                
+                                <div role="tabpanel" class="tab-pane fade" id="histo">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped table-hover ">
+                                            <thead>
+                                                <tr>
+                                                    <th>Office Name</th>
+                                                    <th>Days</th>                                                    
+                                                    <th>Start to End</th>                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>                                                
+                                                <?php 
+                                                if($new != NULL){
+                                                    foreach ($new as $key) {
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $key['office']?></td>
+                                                    <td><?php echo $key['days']->format("%a")?></td>
+                                                    <td>
+                                                        <?php
+                                                        if( $key['daystart'] != NULL AND $key['dayend'] != NULL){
+                                                             echo $key['daystart']. " - ".$key['dayend'];
+                                                        }
+                                                        else if( $key['daystart'] == NULL AND  $key['dayend'] != NULL){
+                                                            echo "Started at ".$key['dayend'];
+                                                        }
+                                                        else{
+                                                            echo "Pending";                                                        
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                </tr>
+                                                <?php 
+                                                    }
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>                                        
+                                    </div>
+                                    <p>Date Start - Date End (Processing)</p>
+                                    <p><?php echo $start?></p>
                                 </div>
 
                             </div>

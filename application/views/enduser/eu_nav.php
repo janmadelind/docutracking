@@ -182,14 +182,16 @@
                     dataType:"json",
                     success:function(data)
                     {
-                        $('#notif').html(data.notification);
-                        // $('#notif').delay(10);
+                        if(!$('#notif').is(':visible')) {
+                            // $('#notif').addClass("notclass");
+                            $('#notif').html(data.notification);
+                        }          
                         if(data.unseen_notification > 0)
                         {
                             $('#unseen_count').html(data.unseen_notification);
                         }
                         else{
-                            $('#unseen_count').html();
+                            $('#unseen_count').html('');
                         }
                         console.log(data.unseen_notification);
                     },

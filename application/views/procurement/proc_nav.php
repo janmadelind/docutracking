@@ -132,12 +132,7 @@
                             <span>Purchase Requests</span>
                         </a> 
                         <ul class="ml-menu">
-                            <li>
-                                <a href="<?php echo site_url('procurement_table_pending'); ?>">
-                                    <span>Pending</span>
-                                    <!-- <span class="badge bg-red" style="color: #fff;">18 new</span> -->
-                                </a>
-                            </li>
+                           
                             <li>
                                 <a href="<?php echo site_url('procurement_table_ongoing'); ?>">
                                     <span>Ongoing</span>
@@ -196,17 +191,19 @@
                     dataType:"json",
                     success:function(data)
                     {
-                        $('#notif').html(data.notification);
-                        // $('#notif').delay(10);
+                        if(!$('#notif').is(':visible')) {
+                            // $('#notif').addClass("notclass");
+                            $('#notif').html(data.notification);
+                        }          
                         if(data.unseen_notification > 0)
                         {
                             $('#unseen_count').html(data.unseen_notification);
                         }
-                        
                         else{
-                            $('#unseen_count').html();
+                            $('#unseen_count').html('');
                         }
                         console.log(data.unseen_notification);
+
                     },
                     error:function(data){
                         console.log(data.responseText);

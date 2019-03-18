@@ -59,8 +59,7 @@ class Enduser_controller extends CI_Controller {
 		$this->load->view('footer');
 	}
 	public function enduser_details($data){
-		$curloc = $this->docutrackingmodel->checkSequence($data);	
-		$det['prcurloc'] = $this->docutrackingmodel->getLoc($curloc);	
+		$det['return'] = $this->docutrackingmodel->checkIfReturned($data);	
 		$det['prremarks'] = $this->docutrackingmodel->read_PRremarks($data);	
 		$det['prdetails'] = $this->docutrackingmodel->read_PRdetails($data);	
 		$det['prbidders'] = $this->docutrackingmodel->read_PRbidders($data);	
@@ -68,8 +67,132 @@ class Enduser_controller extends CI_Controller {
 		$det['prresomode'] = $this->docutrackingmodel->read_PRresomode($data);
 		$det['prresoaward'] = $this->docutrackingmodel->read_PRresoaward($data);
 		$det['allbidders'] = $this->docutrackingmodel->read_allbidders();
+		$det['test'] = $this->docutrackingmodel->readIfReturned($data);
 		$this->load->view('enduser/eu_nav');
-		$this->load->view('PR_Route');
+		if($det['return'] != NULL){
+			$det['prcurloc'] = $this->docutrackingmodel->checkIfReturned($data);
+			$return = $this->docutrackingmodel->checkIfReturned_ID($data);
+			if($det['prdetails'][0]->type_ID == 1){
+				if($return == 1 ){
+					$this->load->view('type1/PR_Route');
+				}
+				else if($return == 4 ){
+					$this->load->view('type1/PR_Route1');
+				}
+				else if($return == 3){
+					$this->load->view('type1/PR_Route_OP1');
+				}
+				else if($return == 6){
+					$this->load->view('type1/PR_Route_ICO1');
+				}
+				else if($return == 7){
+					$this->load->view('type1/PR_Route_BUDGET1');
+				}
+				else if($return == 8){
+					$this->load->view('type1/PR_Route_ACC1');
+				}
+				else if($return == 9){
+					$this->load->view('type1/PR_Route_CASH1');
+				}
+				else if($det['prdetails'][0]->mode_ID == NULL){
+					$this->load->view('type1/PR_Route_EMP1');
+				}	
+			}
+			else{
+				if($return == 1 ){
+					$this->load->view('type/PR_Route');
+				}
+				else if($return == 2 ){
+					$this->load->view('type/PR_RoutePROC');
+				}
+				else if($return == 5 ){
+					$this->load->view('type/PR_RoutePROC1');
+				}
+				else if($return == 4 ){
+					$this->load->view('type/PR_Route1');
+				}
+				else if($return == 3){
+					$this->load->view('type/PR_RouteOP');
+				}
+				else if($return == 6){
+					$this->load->view('type/PR_RouteICO');
+				}
+				else if($return == 7){
+					$this->load->view('type/PR_RouteBUDGET');
+				}
+				else if($return == 8){
+					$this->load->view('type/PR_RouteACC');
+				}
+				else if($return == 9){
+					$this->load->view('type/PR_RouteCASH');
+				}
+				else if($det['prdetails'][0]->mode_ID == NULL){
+					$this->load->view('type/PR_Route_EMP1');
+				}	
+			}				
+		}
+		else{
+			$curloc = $this->docutrackingmodel->checkSequence($data);	
+			$det['prcurloc'] = $this->docutrackingmodel->getLoc($curloc);	
+			if($det['prdetails'][0]->type_ID == 1){
+				if($curloc == 1 ){
+					$this->load->view('type1/PR_Route');
+				}
+				else if($curloc == 4 ){
+					$this->load->view('type1/PR_Route1');
+				}
+				else if($curloc == 3){
+					$this->load->view('type1/PR_Route_OP1');
+				}
+				else if($curloc == 6){
+					$this->load->view('type1/PR_Route_ICO1');
+				}
+				else if($curloc == 7){
+					$this->load->view('type1/PR_Route_BUDGET1');
+				}
+				else if($curloc == 8){
+					$this->load->view('type1/PR_Route_ACC1');
+				}
+				else if($curloc == 9){
+					$this->load->view('type1/PR_Route_CASH1');
+				}
+				else if($det['prdetails'][0]->mode_ID == NULL){
+					$this->load->view('type1/PR_Route_EMP1');
+				}	
+			}
+			else{
+				if($curloc == 1 ){
+					$this->load->view('type/PR_Route');
+				}
+				else if($curloc == 2 ){
+					$this->load->view('type/PR_RoutePROC');
+				}
+				else if($curloc == 5 ){
+					$this->load->view('type/PR_RoutePROC1');
+				}
+				else if($curloc == 4 ){
+					$this->load->view('type/PR_Route1');
+				}
+				else if($curloc == 3){
+					$this->load->view('type/PR_RouteOP');
+				}
+				else if($curloc == 6){
+					$this->load->view('type/PR_RouteICO');
+				}
+				else if($curloc == 7){
+					$this->load->view('type/PR_RouteBUDGET');
+				}
+				else if($curloc == 8){
+					$this->load->view('type/PR_RouteACC');
+				}
+				else if($curloc == 9){
+					$this->load->view('type/PR_RouteCASH');
+				}
+				else if($det['prdetails'][0]->mode_ID == NULL){
+					$this->load->view('type/PR_Route_EMP1');
+				}	
+			}				
+		}
 		$this->load->view('enduser/eu_details',$det);
 		$this->load->view('footer');
 	}
@@ -77,23 +200,29 @@ class Enduser_controller extends CI_Controller {
 	# NOTIFICATION
 	public function notification(){
 		if(isset($_POST['view'])){
-			$result = $this->docutrackingmodel->eu_readNotif($_SESSION['department_ID']);
+			$result = $this->docutrackingmodel->eu_readNotif($_SESSION['admin_office_ID']);
 			$output = '';
 			if($result > 0){
-			 	foreach($result as $key){
-			   		$output .= '
-			   		<li >
-			   		<a href="#">
-			   		<strong>'.$key->message_subject.'</strong><br />
-			   		<small><em>'.$key->message_description.'</em></small>
-			   		</a>
-			   		</li>';
-			 	}		 	
+			 	foreach($result as $key){			 		
+			 			$output .= '
+				   		<li>
+				   		<a href="#">
+				   		<strong>'.$key->message_subject.'</strong><br />
+				   		<small><em>'.$key->message_description.'</em></small>
+				   		</a>
+				   		</li>';			 				   		
+			 	}				 		 
 			}
 			else{
 			    $output .= '
 			    <li><a href="#" class="text-bold text-italic">No Notification Found</a></li>';
 			}
+			$output .= '
+		 			<li>
+                        <a href="'.site_url("enduser_notif").'">
+                            <b style="text-align: center">See All Notifications</b>
+                        </a>
+                    </li> ';
 			if($_POST["view"] != ''){
 				$this->docutrackingmodel->eu_update_notif($_SESSION['department_ID']);
 			}
@@ -105,5 +234,6 @@ class Enduser_controller extends CI_Controller {
 			echo json_encode($data);
 		}
 	}
+	
 }
 ?>

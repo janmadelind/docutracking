@@ -18,7 +18,7 @@
                                     if($prdetails != NULL ){
                                         foreach ($prdetails as $key) {  
                                             if($prresomode == NULL){                                
-                                    ?>
+                                    ?>                                
                                     <!-- ADD RESO OF MODE -->
                                         <button class="btn bg-red waves-effect m-b-5" data-toggle="modal" data-target="#reso1<?php echo $key->PR_No;?>"><i class="material-icons">library_add</i><span>ADD RESOLUTION FOR MODE</span></button>
                                         <div class="modal fade" id="reso1<?php echo $key->PR_No;?>" tabindex="-1" role="dialog">
@@ -44,10 +44,45 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <br><br>
                                     <!-- ADD RESO OF MODE -->
                                     <?php 
                                             }
+                                    ?>
+                                    <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#qwe<?php echo $key->PR_No?>"><i class="material-icons">library_add</i><span>RETURN</span></button>
+                                        
+                                        <div class="modal fade" id="qwe<?php echo $key->PR_No?>" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog modal-sm" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="smallModalLabel">Select PR Destination</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <?php echo form_open("Procurement_controller/proc_PR_return/$key->PR_No");?>
+                                                        <select class="form-control show-tick" name="destination">
+                                                            <option><?php echo $key->end_user_name?></option>
+                                                            <option value="1">BAC</option>
+                                                            <option value="2">PROC</option>
+                                                            <option value="6">ICO</option>
+                                                            <option value="3">OP</option>
+                                                        </select>
+                                                        <br>
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                    <input type="text" class="form-control" name="remarks" required>
+                                                                    <label class="form-label">Remarks</label>
+                                                            </div>
+                                                        </div>                                                                                                                
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <input class="btn bg-red waves-effect" type="submit" name="submit" value="RETURN">
+                                                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                        <?php echo form_close();?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br><br>
+                                    <?php
                                         }
                                     }
                                     ?>                                    
@@ -71,13 +106,34 @@
                                             <td>
                                                 <p>  
                                                     <?php 
-                                                    
-                                                        if($curloc->admin_office_ID == NULL){ 
-                                                            echo "Bids and Awards Committee";
-                                                        }
-                                                        else{ 
-                                                            echo $curloc->admin_office_name;
-                                                        }                                                    
+                                                    if($return1 != NULL){                                                    
+                                                        foreach ($return1 as $ret1) { 
+                                                            if($ret1->end_user_name != NULL){ 
+                                                               echo $ret1->college_name." - ".$ret1->department_name ;
+                                                            } 
+                                                        }       
+                                                    }
+                                                    else if($prcurloc != NULL AND $return1 == NULL){                                                    
+                                                        foreach ($prcurloc as $curloc) { 
+                                                            if($test != NULL && $curloc->admin_office_ID != NULL){ 
+                                                               echo "Returned to ".$curloc->admin_office_name;
+                                                            } 
+                                                            else{ 
+                                                               echo $curloc->admin_office_name;
+                                                            } 
+
+                                                        }       
+                                                    }
+                                                    else if($return != NULL){                                                    
+                                                        foreach ($return as $ret) { 
+                                                            if($ret->admin_office_ID != NULL){ 
+                                                               echo $ret->admin_office_name;
+                                                            } 
+                                                        }       
+                                                    }
+                                                    else{
+                                                        echo "Bids and Awards Committee";
+                                                    }                                         
                                                     ?>
                                                 </p>
                                             </td>
@@ -158,6 +214,10 @@
                                         <?php 
                                         }
                                         ?>
+                                        <tr>
+                                            <td><p><b>Alloted Day to process:</b> </p></td> 
+                                            <td><p> <?php echo $days?></p> </td>
+                                        </tr>
                                     </table>
                                 </div>
                                 

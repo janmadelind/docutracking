@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 // 192.168.43.179
-$config['base_url'] = 'http://192.168.43.179/docutracking/';
+$config['base_url'] = 'http://localhost/docutracking/';
 
 /*
 |--------------------------------------------------------------------------

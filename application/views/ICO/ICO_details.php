@@ -18,6 +18,38 @@
                                     if($prdetails != NULL){
                                         foreach ($prdetails as $key) {
                                     ?>
+                                    <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#qwe<?php echo $key->PR_No?>"><i class="material-icons">library_add</i><span>RETURN</span></button>
+                                        
+                                        <div class="modal fade" id="qwe<?php echo $key->PR_No?>" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog modal-sm" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="smallModalLabel">Select PR Destination</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <?php echo form_open("ICO_controller/ICO_PR_return/$key->PR_No");?>
+                                                        <select class="form-control show-tick" name="destination">
+                                                           <option><?php echo $key->end_user_name?></option>
+                                                            <option value="1">BAC</option>
+                                                            <option value="2">PROC</option>
+                                                        </select>
+                                                        <br>
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                    <input type="text" class="form-control" name="remarks" required>
+                                                                    <label class="form-label">Remarks</label>
+                                                            </div>
+                                                        </div>                                                                                                                
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <input class="btn bg-red waves-effect" type="submit" name="submit" value="RETURN">
+                                                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                        <?php echo form_close();?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br><br>
                                     <table>
                                         <tr>
                                             <td><p><b>PR #</b> </p></td>
@@ -32,10 +64,28 @@
                                             <td>
                                                 <p>  
                                                     <?php 
-                                                    if($prcurloc != NULL){                                                    
+                                                    if($return1 != NULL){                                                    
+                                                        foreach ($return1 as $ret1) { 
+                                                            if($ret1->end_user_name != NULL){ 
+                                                               echo $ret1->college_name." - ".$ret1->department_name ;
+                                                            } 
+                                                        }       
+                                                    }
+                                                    else if($prcurloc != NULL AND $return1 == NULL){                                                    
                                                         foreach ($prcurloc as $curloc) { 
-                                                            if($curloc->admin_office_ID != NULL){ 
+                                                            if($test != NULL && $curloc->admin_office_ID != NULL){ 
+                                                               echo "Returned to ".$curloc->admin_office_name;
+                                                            } 
+                                                            else{ 
                                                                echo $curloc->admin_office_name;
+                                                            } 
+
+                                                        }       
+                                                    }
+                                                    else if($return != NULL){                                                    
+                                                        foreach ($return as $ret) { 
+                                                            if($ret->admin_office_ID != NULL){ 
+                                                               echo $ret->admin_office_name;
                                                             } 
                                                         }       
                                                     }

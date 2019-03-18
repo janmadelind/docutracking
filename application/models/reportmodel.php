@@ -3,15 +3,16 @@
 class reportmodel extends CI_Model {
 	public function __construct()
 	{
-		parent::__construct();				
+		parent::__construct();	
+		date_default_timezone_set('Asia/Kuala_Lumpur');		
+		
 	}
-	
-	public function countSVPpr(){
+	public function monthly(){
 		$query = $this->db->query (
-			"SELECT mp.mode_of_procurement,document.PR_No,month(document.date_submitted) as mon
+			"SELECT count(document.PR_No) as c, month(document.date_submitted) as m
 			FROM document
-			INNER JOIN mode_of_procurement mp ON mp.mode_ID = document.mode_ID
-			WHERE mp.mode_ID =1
+			GROUP BY month(document.date_submitted)
+			ORDER BY document.date_submitted ASC
 			"
 		);
 		if($query->num_rows() > 0){
@@ -21,12 +22,226 @@ class reportmodel extends CI_Model {
 			return NULL;
 		}
 	}
-	public function countNPpr(){
+	public function quarterly(){
 		$query = $this->db->query (
-			"SELECT mp.mode_of_procurement, document.PR_No, month(document.date_submitted) as mon
+			"SELECT count(document.PR_No) as c, quarter(document.date_submitted) as m
+			FROM document
+			GROUP BY quarter(document.date_submitted)
+			ORDER BY document.date_submitted ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	public function pr_per_mode(){ 
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c,  mp.mode_ID  as mp
+			FROM document
+			INNER JOIN mode_of_procurement mp ON mp.mode_ID = document.mode_ID
+			GROUP BY mp.mode_ID 
+			ORDER BY document.date_submitted ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	public function pr_per_college(){ 
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c, c.college_ID as college
+			FROM document
+			INNER JOIN end_user eu ON eu.end_user_ID = document.end_user_ID
+			INNER JOIN colleges c ON eu.college_ID = c.college_ID
+			GROUP BY c.college_ID
+			ORDER BY document.date_submitted ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	public function pr_per_dept(){ // all pr
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c, d.department_ID as d
+			FROM document
+			INNER JOIN end_user eu ON eu.end_user_ID = document.end_user_ID
+			INNER JOIN colleges c ON eu.college_ID = c.college_ID
+			INNER JOIN department d ON d.department_ID = eu.department_ID
+			GROUP BY d.department_ID
+			ORDER BY d.department_ID ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	
+	public function COS_monthly(){ 
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c, month(document.date_submitted) as m
+			FROM document
+			INNER JOIN end_user eu ON eu.end_user_ID = document.end_user_ID
+			INNER JOIN colleges c ON eu.college_ID = c.college_ID
+			WHERE c.college_ID = 1
+			GROUP BY month(document.date_submitted)
+			ORDER BY document.date_submitted ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	public function CLA_monthly(){ 
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c, month(document.date_submitted) as m
+			FROM document
+			INNER JOIN end_user eu ON eu.end_user_ID = document.end_user_ID
+			INNER JOIN colleges c ON eu.college_ID = c.college_ID
+			WHERE c.college_ID = 2
+			GROUP BY month(document.date_submitted)
+			ORDER BY document.date_submitted ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	public function CIE_monthly(){ 
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c, month(document.date_submitted) as m
+			FROM document
+			INNER JOIN end_user eu ON eu.end_user_ID = document.end_user_ID
+			INNER JOIN colleges c ON eu.college_ID = c.college_ID
+			WHERE c.college_ID = 3
+			GROUP BY month(document.date_submitted)
+			ORDER BY document.date_submitted ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	public function CIT_monthly(){ 
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c, month(document.date_submitted) as m
+			FROM document
+			INNER JOIN end_user eu ON eu.end_user_ID = document.end_user_ID
+			INNER JOIN colleges c ON eu.college_ID = c.college_ID
+			WHERE c.college_ID = 4
+			GROUP BY month(document.date_submitted)
+			ORDER BY document.date_submitted ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	public function COE_monthly(){ 
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c, month(document.date_submitted) as m
+			FROM document
+			INNER JOIN end_user eu ON eu.end_user_ID = document.end_user_ID
+			INNER JOIN colleges c ON eu.college_ID = c.college_ID
+			WHERE c.college_ID = 5
+			GROUP BY month(document.date_submitted)
+			ORDER BY document.date_submitted ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	public function CAFA_monthly(){ 
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c, month(document.date_submitted) as m
+			FROM document
+			INNER JOIN end_user eu ON eu.end_user_ID = document.end_user_ID
+			INNER JOIN colleges c ON eu.college_ID = c.college_ID
+			WHERE c.college_ID = 6
+			GROUP BY month(document.date_submitted)
+			ORDER BY document.date_submitted ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	
+	
+	public function SVPmonthly(){
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c, month(document.date_submitted) as m
+			FROM document
+			INNER JOIN mode_of_procurement mp ON mp.mode_ID = document.mode_ID
+			WHERE mp.mode_ID =1 
+			GROUP BY month(document.date_submitted)
+			ORDER BY document.date_submitted ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	
+	public function Smonthly(){
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c, month(document.date_submitted) as m
 			FROM document
 			INNER JOIN mode_of_procurement mp ON mp.mode_ID = document.mode_ID
 			WHERE mp.mode_ID = 2
+			GROUP BY month(document.date_submitted)
+			ORDER BY document.date_submitted ASC
+			"
+		);
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		else{
+			return NULL;
+		}
+	}
+	public function NPmonthly(){
+		$query = $this->db->query (
+			"SELECT count(document.PR_No) as c, month(document.date_submitted) as m
+			FROM document
+			INNER JOIN mode_of_procurement mp ON mp.mode_ID = document.mode_ID
+			WHERE mp.mode_ID = 3
+			GROUP BY month(document.date_submitted)
+			ORDER BY document.date_submitted ASC
 			"
 		);
 		if($query->num_rows() > 0){
@@ -37,27 +252,14 @@ class reportmodel extends CI_Model {
 		}
 	}
 	
-	public function monthlyPR(){
+	public function DCmonthly(){
 		$query = $this->db->query (
-			"SELECT PR_No, month(date_submitted) as mon
-			FROM document
-			"
-		);
-		if($query->num_rows() > 0){
-			return $query->result();
-		}
-		else{
-			return NULL;
-		}
-	}
-	public function deptcolPR(){
-		$query = $this->db->query (
-			"SELECT colleges.college_ID, colleges.college_name, department.department_name,department.department_ID, document.PR_No, month(document.date_submitted) as mon,year(curdate()) as yr , document.mode_ID
+			"SELECT count(document.PR_No) as c, month(document.date_submitted) as m
 			FROM document
 			INNER JOIN mode_of_procurement mp ON mp.mode_ID = document.mode_ID
-			INNER JOIN end_user ON end_user.end_user_ID = document.end_user_ID
-			INNER JOIN colleges ON end_user.college_ID = colleges.college_ID
-			INNER JOIN department ON end_user.department_ID = department.department_ID
+			WHERE mp.mode_ID = 4
+			GROUP BY month(document.date_submitted)
+			ORDER BY document.date_submitted ASC
 			"
 		);
 		if($query->num_rows() > 0){
@@ -67,31 +269,7 @@ class reportmodel extends CI_Model {
 			return NULL;
 		}
 	}
-	public function deptname(){
-		$query = $this->db->query (
-			"SELECT department.department_name,department.department_ID
-			FROM department
-			"
-		);
-		if($query->num_rows() > 0){
-			return $query->result();
-		}
-		else{
-			return NULL;
-		}
-	}
-	public function colname(){
-		$query = $this->db->query (
-			"SELECT colleges.college_name,colleges.college_ID
-			FROM colleges
-			"
-		);
-		if($query->num_rows() > 0){
-			return $query->result();
-		}
-		else{
-			return NULL;
-		}
-	}
+	
+	
 }
 ?>

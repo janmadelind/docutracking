@@ -30,6 +30,9 @@
                                             <th>Subject</th>
                                             <th>Description</th>
                                             <th>Date</th>
+                                            <th>Remarks</th>
+                                            <th>Action</th>
+
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -38,9 +41,61 @@
                                             <th>Subject</th>
                                             <th>Description</th>
                                             <th>Date</th>
+                                            <th>Remarks</th>
+                                            <th>Action</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
+                                        <?php 
+                                        if($duedatereport!=NULL){
+                                            foreach ($duedatereport as $key) {
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $key->PR_No?></td>
+                                            <td><?php echo $key->message_subject?></td>
+                                            <td><?php echo $key->message_description?></td>
+                                            <td><?php echo $key->created_at?></td>
+                                            <td><?php echo $key->remarks;?></td>
+                                            <td>
+
+                                                <?php 
+                                                if($key->message_subject == "Due Date"){
+                                                    echo '<a class="btn bg-red waves-effect" data-toggle="modal" data-target="#notif'.$key->PR_No.'">ADD REMARKS </a>';
+                                                }
+                                                else{
+                                                    echo 'No Actions';
+                                                }
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        <?php echo '
+                                            <div class="modal fade" id="notif'.$key->PR_No.'" tabindex="-1" role="dialog">'; ?>
+                                                <div class="modal-dialog modal-sm" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="smallModalLabel">PR DETAILS</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <?php echo form_open("Admin_controller/bac_addPR_remarks1/$key->PR_No"); ?>
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="remarks" required>
+                                                                        <label class="form-label">Remarks</label>
+                                                                </div>
+                                                            </div> 
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input class="btn bg-red waves-effect" type="submit" name="submit" value="UPDATE">
+                                                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                            <?php echo form_close();?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php 
+                                            }
+                                        }
+                                        ?>
                                         <?php 
                                         if($read!=NULL){
                                             foreach ($read as $key) {
@@ -50,7 +105,43 @@
                                             <td><?php echo $key->message_subject?></td>
                                             <td><?php echo $key->message_description?></td>
                                             <td><?php echo $key->created_at?></td>
+                                            <td>SAMPLE REMARKS</td>
+                                            <td>
+
+                                                <?php 
+                                                if($key->message_subject == "Due Date"){
+                                                    echo '<a class="btn bg-red waves-effect" data-toggle="modal" data-target="#notif'.$key->PR_No.'">ADD REMARKS </a>';
+                                                }
+                                                else{
+                                                    echo 'No Actions';
+                                                }
+                                                ?>
+                                            </td>
                                         </tr>
+                                        <?php echo '
+                                            <div class="modal fade" id="notif'.$key->PR_No.'" tabindex="-1" role="dialog">'; ?>
+                                                <div class="modal-dialog modal-sm" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="smallModalLabel">PR DETAILS</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <?php echo form_open("Admin_controller/bac_addPR_remarks1/$key->PR_No"); ?>
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                        <input type="text" class="form-control" name="remarks" required>
+                                                                        <label class="form-label">Remarks</label>
+                                                                </div>
+                                                            </div> 
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input class="btn bg-red waves-effect" type="submit" name="submit" value="UPDATE">
+                                                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                            <?php echo form_close();?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         <?php 
                                             }
                                         }

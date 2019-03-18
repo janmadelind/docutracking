@@ -91,6 +91,7 @@
                                                             <option value="pending">Pending</option>
                                                             <option value="approved">Approved</option>
                                                             <option value="failed">Failed</option>
+                                                            <option value="to be returned">To be returned</option>
                                                         </select> 
 
                                                     </div>

@@ -52,9 +52,16 @@
                                         <tr>
                                             <td><?php echo $key->PR_No?></td>
                                             <td><?php echo $key->date_submitted?></td>
-                                             
                                             <td><?php echo $key->proj_description?></td>
-                                            <td><?php echo $key->mode_of_procurement?></td>
+                                            <td><?php 
+                                                if($key->mode_ID != NULL){
+                                                    echo $key->mode_of_procurement;
+                                                }
+                                                else{
+                                                    echo "None";
+                                                }
+                                                ?>
+                                            </td>
                                             <td><?php echo $key->amount?></td>
                                             <td><?php echo'<a href="'.site_url('Enduser_controller/enduser_details/'.$key->PR_No.'').'">'?>
                                                 <button type="button" class="btn bg-red waves-effect">View Details</button>
