@@ -9,7 +9,7 @@
                 <h6>COS OFFICE</h6>
             </div>
             <div class="row">
-                <div onclick="window.location.href='enduser_table_submittedpr'" class="col-xs-12">
+                 <div onclick="window.location.href='enduser_table_submittedpr'" class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box-3 bg-red hover-zoom-effect">
                         <div class="icon">
                             <i class="material-icons">assignment</i>
@@ -21,27 +21,6 @@
                                 foreach ($euserPR as $key) {
                             ?>
                             <div class="number count-to" data-from="0" data-to="<?php echo $key->prsubmitted; ?>"  data-speed="1500" data-fresh-interval="20"></div>
-                            <?php
-                                }
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div onclick="window.location.href='enduser_table_pending'" class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box-3 bg-red hover-zoom-effect">
-                        <div class="icon">
-                            <i class="material-icons">assignment</i>
-                        </div>
-                        <div class="content">
-                            <div class="text">Pending PRs</div>
-                            <?php 
-                            if($euserpending != NULL){
-                                foreach ($euserpending as $key) {
-                            ?>
-                            <div class="number count-to" data-from="0" data-to="<?php echo $key->prpending; ?>"  data-speed="1500" data-fresh-interval="20"></div>
                             <?php
                                 }
                             }
@@ -74,8 +53,16 @@
                             <i class="material-icons">assignment_turned_in</i>
                         </div>
                         <div class="content">
-                            <div class="text">Finished PRs</div>
-                            <div class="number count-to" data-from="0" data-to="0" data-speed="1500" data-fresh-interval="20"></div>
+                            <div class="text">Approved PRs</div>
+                            <?php 
+                            if($pr_done != NULL){
+                                foreach ($pr_done as $key) {
+                            ?>
+                            <div class="number count-to" data-from="0" data-to="<?php echo $key->prdone; ?>"  data-speed="1500" data-fresh-interval="20"></div>
+                            <?php
+                                }
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -86,8 +73,15 @@
                         </div>
                         <div class="content">
                             <div class="text">Failed PRs</div>
-                            <div class="number count-to" data-from="0" data-to="0" data-speed="1500" data-fresh-interval="20"></div>
-                        </div>
+                            <?php 
+                            if($prfail != NULL){
+                                foreach ($prfail as $key) {
+                            ?>
+                            <div class="number count-to" data-from="0" data-to="<?php echo $key->prfail; ?>"  data-speed="1500" data-fresh-interval="20"></div>
+                            <?php
+                                }
+                            }
+                            ?>
                     </div>
                 </div>
             </div>

@@ -58,7 +58,7 @@
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
     <!-- Search Bar -->
-    <div class="search-bar">
+    <div class="search-bar noprint">
         <div class="search-icon">
             <i class="material-icons">search</i>
         </div>
@@ -69,7 +69,7 @@
     </div>
     <!-- #END# Search Bar -->
     <!-- Top Bar -->
-    <nav class="navbar bg-black">
+    <nav class="navbar bg-black noprint">
         <div class="container-fluid">
             
             <div class="navbar-header">
@@ -86,7 +86,7 @@
                             <i class="material-icons">notifications</i>
                             <span class="label-count bg-red " id="unseen_count"></span>
                         </a>
-                        <ul class="dropdown-menu" id="notif">
+                        <ul class="dropdown-menu" id="notif" style="height: 200px; width: 300px; overflow-y: scroll">
                             
                         </ul>
                         
@@ -100,7 +100,7 @@
     <!-- #Top Bar -->
     <section>
         <!-- Left Sidebar -->
-        <aside id="leftsidebar" class="sidebar">
+        <aside id="leftsidebar" class="sidebar noprint">
             <!-- User Info -->
             <div class="user-info">
                 <div class="info-container">
@@ -120,34 +120,33 @@
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active">
-                        <a href="<?php echo site_url('bac'); ?>" >
-                            <i class="material-icons">home</i>
-                            <span>Home</span>
+                        <a href="<?php echo site_url('bac'); ?>">
+                            <i class="material-icons col-grey">home</i>
+                            <span class="col-grey">Home</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="menu-toggle">
+                        <a href="javascript:void(0);" class=" menu-toggle waves-effect waves-block" id='PRnav'>
                             <i class="material-icons">content_paste</i>
                             <span>Purchase Requests</span>
                         </a> 
                         <ul class="ml-menu">
-                            <li>
+                            <!-- <li class="navpr">
                                 <a href="<?php echo site_url('bac_table_pending'); ?>">
                                     <span>Pending</span>
-                                    <!-- <span class="badge bg-red" style="color: #fff;">18 new</span> -->
                                 </a>
-                            </li>
-                            <li>
+                            </li> -->
+                            <li class="navpr">
                                 <a href="<?php echo site_url('bac_table_ongoing'); ?>">
                                     <span>Ongoing</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="navpr">
                                 <a href="<?php echo site_url('bac_table_done'); ?>">
-                                    <span>Done</span>
+                                    <span>Approved</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="navpr">
                                 <a href="<?php echo site_url('bac_table_failed'); ?>">
                                     <span>Failed</span>
                                 </a>
@@ -160,8 +159,8 @@
                             <span>Notifications</span>
                         </a>
                     </li>   
-                     <li>
-                        <a href="<?php echo site_url('bac'); ?>">
+                    <li>
+                        <a href="<?php echo site_url('bac_reports'); ?>">
                             <i class="material-icons">library_books</i>
                             <span>Reports</span>
                         </a>
@@ -180,7 +179,7 @@
         <!-- #END# Left Sidebar -->
         <!-- Right Sidebar -->
     </section>
-     <script type="text/javascript">
+    <script type="text/javascript">
         $(document).ready(function(){
             function load_unseen_notification(view = '')
             {
@@ -191,18 +190,20 @@
                     dataType:"json",
                     success:function(data)
                     {
-                        $('#notif').html(data.notification).delay(500);
+                        $('#notif').html(data.notification);
+                        // $('#notif').delay(10);
                         if(data.unseen_notification > 0)
                         {
                             $('#unseen_count').html(data.unseen_notification);
                         }
+                        else{
+                            $('#unseen_count').html();
+                        }
                         console.log(data.unseen_notification);
                     },
                     error:function(data){
-                        alert('ERROR!!')
                         console.log(data.responseText);
-                }
-
+                    }
                 });
             }
          
@@ -215,6 +216,8 @@
          
             setInterval(function(){ 
                 load_unseen_notification();; 
-            }, 5000);
-            });
+            }, 1000);
+            
+        });
+
     </script>

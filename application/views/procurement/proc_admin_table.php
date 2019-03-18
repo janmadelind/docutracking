@@ -55,7 +55,7 @@
                                             <td><?php echo $key->PR_No?></td>
                                             <td><?php echo $key->date_submitted?></td>
                                             <td><?php echo $key->proj_description?></td>
-                                            <td><?php echo $key->mode_of_procurement?></td>
+                                            <td><?php echo $key->mode_of_procurement?> - <?php echo $key->type_name ?></td>
                                             <td><?php echo $key->college_name?> - <?php echo $key->department_name?> Department</td>
                                             <td><?php echo $key->amount?></td>
                                             <td>

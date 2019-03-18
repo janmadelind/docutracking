@@ -60,7 +60,7 @@
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
     <!-- Search Bar -->
-    <div class="search-bar">
+    <div class="search-bar noprint">
         <div class="search-icon">
             <i class="material-icons">search</i>
         </div>
@@ -71,7 +71,7 @@
     </div>
     <!-- #END# Search Bar -->
     <!-- Top Bar -->
-    <nav class="navbar bg-black">
+    <nav class="navbar bg-black noprint">
         <div class="container-fluid">
             
             <div class="navbar-header">
@@ -84,10 +84,13 @@
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Notifications -->
                     <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
-                            <span class="label-count bg-red"></span>
+                            <span class="label-count bg-red " id="unseen_count"></span>
                         </a>
+                        <ul class="dropdown-menu" id="notif" style="height: 200px; width: 300px; overflow-y: scroll">
+                            
+                        </ul>
                         
                     </li>
                     <!-- #END# Notifications -->
@@ -98,7 +101,7 @@
     <!-- #Top Bar -->
     <section>
         <!-- Left Sidebar -->
-        <aside id="leftsidebar" class="sidebar">
+        <aside id="leftsidebar" class="sidebar noprint">
             <!-- User Info -->
             <div class="user-info">
                 <div class="info-container">
@@ -119,8 +122,8 @@
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active">
                         <a href="<?php echo site_url('procurement'); ?>">
-                            <i class="material-icons">home</i>
-                            <span>Home</span>
+                            <i class="material-icons col-grey">home</i>
+                            <span class="col-grey">Home</span>
                         </a>
                     </li>
                     <li>
@@ -142,7 +145,7 @@
                             </li>
                             <li>
                                 <a href="<?php echo site_url('procurement_table_done'); ?>">
-                                    <span>Done</span>
+                                    <span>Approved</span>
                                 </a>
                             </li>
                             <li>
@@ -150,6 +153,7 @@
                                     <span>Failed</span>
                                 </a>
                             </li>
+                            
                         </ul>
                     </li>
                     <li>
@@ -157,6 +161,15 @@
                             <i class="material-icons">add_alert</i>
                             <span>Notifications</span>
                         </a>
+                    </li>  
+                    </li>           
+                        <a href="<?php echo site_url('proc_reports'); ?>">
+                            <i class="material-icons">library_books</i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                    <li>
+                        <p id="demo"></p>
                     </li>                
                 </ul>
             </div>
@@ -172,3 +185,46 @@
         <!-- #END# Left Sidebar -->
         <!-- Right Sidebar -->
     </section>
+   <script type="text/javascript">
+        $(document).ready(function(){
+            function load_unseen_notification(view = '')
+            {
+                $.ajax({
+                    url:"<?php echo base_url('Procurement_controller/notification');?>",
+                    method:"POST",
+                    data:{view:view},
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        $('#notif').html(data.notification);
+                        // $('#notif').delay(10);
+                        if(data.unseen_notification > 0)
+                        {
+                            $('#unseen_count').html(data.unseen_notification);
+                        }
+                        
+                        else{
+                            $('#unseen_count').html();
+                        }
+                        console.log(data.unseen_notification);
+                    },
+                    error:function(data){
+                        console.log(data.responseText);
+                    }
+                });
+            }
+         
+            load_unseen_notification();
+            
+            $(document).on('click', '.dropdown-toggle', function(){
+                $('.count').html('');
+                load_unseen_notification('yes');
+            });
+         
+            setInterval(function(){ 
+                load_unseen_notification();; 
+            }, 1000);
+            
+        });
+
+    </script>

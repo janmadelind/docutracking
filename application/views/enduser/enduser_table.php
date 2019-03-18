@@ -28,7 +28,6 @@
                                         <tr>
                                             <th>PR#</th>
                                             <th>Date Submitted</th>
-                                            <th>Project Name</th>
                                             <th>Description</th>
                                             <th>Mode of Procurement</th>
                                             <th>Amount</th>
@@ -39,7 +38,6 @@
                                         <tr>
                                             <th>PR#</th>
                                             <th>Date Submitted</th>
-                                            <th>Project Name</th>
                                             <th>Description</th>
                                             <th>Mode of Procurement</th>
                                             <th>Amount</th>
@@ -54,7 +52,7 @@
                                         <tr>
                                             <td><?php echo $key->PR_No?></td>
                                             <td><?php echo $key->date_submitted?></td>
-                                            <td><?php echo $key->proj_name?></td>
+                                             
                                             <td><?php echo $key->proj_description?></td>
                                             <td><?php echo $key->mode_of_procurement?></td>
                                             <td><?php echo $key->amount?></td>

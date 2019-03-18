@@ -79,6 +79,7 @@ function update_total() {
 
   $('#subtotal').html("Php "+total);
   $('#total').html("Php "+total);
+  $('#total_input').val(total);
   
   update_balance();
 }

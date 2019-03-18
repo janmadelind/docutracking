@@ -1,33 +1,21 @@
 <!DOCTYPE html>
-    <section class="content">
-        <div class="container-fluid">
-            <div class="block-header">
-                <h2>PR DETAILS (BAC)</h2>
-            </div>
-            <div class="align-center m-t-15 font-bold">Current Route</div>
-            <ol class="breadcrumb breadcrumb-bg-pink align-center">
-                <li><a href="javascript:void(0);"><i class="material-icons">home</i> BAC</a></li>
-                <li><a href="javascript:void(0);"><i class="material-icons">library_books</i> LPROCUREMENT</a></li>
-                <li class="active"><i class="material-icons">home</i> BAC</li>
-            </ol>
-            <!-- Example Tab -->
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="body">
                             <!-- Nav tabs -->
-                            <ul class="nav nav-tabs tab-nav-right" role="tablist">
-                                <li role="presentation" class="active"><a href="#info" data-toggle="tab">PR Info</a></li>
-                                <li role="presentation"><a href="#bidders" data-toggle="tab">Bidders</a></li>
-                                <li role="presentation"><a href="#files" data-toggle="tab">Attached Files</a></li>
-                                <li role="presentation"><a href="#remarks" data-toggle="tab">Remarks</a></li>
+                            <ul class="nav nav-tabs tab-nav-right tab-col-red" role="tablist">
+                                <li role="presentation" class="active"><a href="#info" data-toggle="tab"><i class="material-icons">info</i> PR Info</a></li>
+                                <li role="presentation"><a href="#bidders" data-toggle="tab"><i class="material-icons">assignment_ind</i> Bidders</a></li>
+                                <li role="presentation"><a href="#files" data-toggle="tab"><i class="material-icons">attach_file</i> Attached Files</a></li>
+                                <li role="presentation"><a href="#remarks" data-toggle="tab"><i class="material-icons">comment</i> Remarks</a></li>
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane fade in active" id="info">
                                     <?php 
-                                    if($prdetails != NULL ){
+                                    if($prdetails != NULL){
                                         foreach ($prdetails as $key) {
                                             $dash = " - ";
                                             if($key->mode_ID == 0  )
@@ -36,28 +24,33 @@
                                                 $dash = "";
                                                 $key->type_name ="";
                                             }
-                                            if ($prdetails[0]->mode_ID == 0){
-                                    ?>
+                                            
+                                    ?>                                    
                                     <!-- ADD PR MODE -->
-                                        <?php  
-                                        echo '<a class="btn bg-red waves-effect" data-toggle="modal" data-target="#mode'.$key->PR_No.'">ADD MODE </a>';
-                                        echo '
-                                        <div class="modal fade" id="mode'.$key->PR_No.'" tabindex="-1" role="dialog">'; ?>
+                                        <?php
+                                        if ($prdetails[0]->mode_ID == 0){?>
+                                        <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#mode<?php echo $key->PR_No?>"><i class="material-icons">library_add</i><span>ADD MODE</span></button>
+                                        
+                                        <div class="modal fade" id="mode<?php echo $key->PR_No?>" tabindex="-1" role="dialog">
                                             <div class="modal-dialog modal-sm" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title" id="smallModalLabel">PR DETAILS</h4>
+                                                        <h4 class="modal-title" id="smallModalLabel">Select PR Mode</h4>
                                                     </div>
                                                     <div class="modal-body">
                                                         <?php echo form_open("Admin_controller/bac_addPR_modetype/$key->PR_No");?>
-                                                        <input type="checkbox" name="mode[]" id="Small_Value" value="1" ><label for="Small_Value">Small Value Shopping</label>
-                                                        <input type="checkbox" name="mode[]" id="Negotiated" value="2"><label for="Negotiated">Negotiated Procurement</label>
+                                                        <input type="radio" name="mode[]" id="Small_Value" value="1" ><label for="Small_Value">Small Value Shopping</label>
+                                                        <input type="radio" name="mode[]" id="Negotiated" value="2"><label for="Negotiated">Lease of Real Property And Venue</label>
+                                                        <input type="radio" name="mode[]" id="Shopping" value="3"><label for="Shopping">Shopping<label>
+                                                        <input type="radio" name="mode[]" id="Direct" value="4"><label for="Direct">Direct Contracting<label>
+                                                        <br>
                                                         <div class="Small_Value">
-                                                            <input type="checkbox" name="type[]" id="food" value="1"><label for="food">Food</label><br>
-                                                            <input type="checkbox" name="type[]" id="Supplies" value="3"><label for="Supplies">Supplies and Materials</label><br>
-                                                            <input type="checkbox" name="type[]" id="Venue" value="2"><label for="Venue">Venue</label><br>
-                                                            <input type="checkbox" name="type[]" id="Equipment" value="4"><label for="Equipment">Equipment</label><br>
+                                                            <input type="radio" name="type[]" id="food" value="1"><label for="food">Food</label><br>
+                                                            <input type="radio" name="type[]" id="Supplies" value="3"><label for="Supplies">Supplies and Materials</label><br>
+                                                            <!-- <input type="radio" name="type[]" id="Venue" value="2"><label for="Venue">Venue</label><br> -->
+                                                            <input type="radio" name="type[]" id="Equipment" value="4"><label for="Equipment">Equipment</label><br>
                                                         </div>
+                                                        
                                                     </div>
                                                     <div class="modal-footer">
                                                         <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
@@ -67,12 +60,46 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <br><br>
+                                        <?php } ?>
                                     <!-- ADD PR MODE -->
-                                    <br>
-                                    <?php 
-                                            }                                             
-                                    ?>
-                                    <br>
+                                    
+                                    <!-- ADD RESO OF MODE -->                                   
+                                        <?php
+                                            if($prdetails[0]->type_ID == 1 OR $prdetails[0]->type_ID == 2){ 
+                                                if($prresomode == NULL){                                
+                                        ?>
+                                            <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#reso1<?php echo $key->PR_No;?>"><i class="material-icons">library_add</i><span>ADD RESOLUTION FOR MODE</span></button>
+                                            <div class="modal fade" id="reso1<?php echo $key->PR_No;?>" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog modal-sm" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="smallModalLabel">Resolution for Mode Detail</h4>
+                                                        </div>
+                                                        <?php echo form_open("Admin_controller/bac_addPR_resomode/$key->PR_No");?>
+                                                        <div class="modal-body">
+                                                            <div class="form-group form-float">
+                                                                <div class="form-line">
+                                                                    <input type="text" class="form-control" name="resomode" required>
+                                                                    <label class="form-label">Resolution Number</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
+                                                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                            <?php echo form_close();?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <br><br>
+                                        <?php
+                                                }
+                                            }
+                                        ?>
+                                    <!-- ADD RESO OF MODE -->
+                                                                                                
                                     <table>
                                         <tr>
                                             <td><p><b>PR #</b> </p></td>
@@ -87,16 +114,21 @@
                                             <td>
                                                 <p>  
                                                     <?php 
-                                                    if($prcurloc['admin_office_ID'] == NULL){ echo "BAC";}
-                                                    else{ echo $prcurloc['admin_office_ID'];}
+                                                    if($prcurloc != NULL){                                                    
+                                                        foreach ($prcurloc as $curloc) { 
+                                                            if($curloc->admin_office_ID != NULL){ 
+                                                               echo $curloc->admin_office_name;
+                                                            } 
+                                                        }       
+                                                    }
+                                                    else{
+                                                        echo "Bids and Awards Committee";
+                                                    }                                         
                                                     ?>
                                                 </p>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td><p><b>Project Name:</b> </p></td>
-                                            <td><p>  <?php echo $key->proj_name?></p></td>
-                                        </tr>                                 
+                                                                     
                                         <tr>
                                             <td><p><b>Description:</b> </p></td>
                                             <td><p>  <?php echo $key->proj_description?></p></td>
@@ -121,40 +153,295 @@
                                             <td><p><b>Amount:</b> </p></td> 
                                             <td><p>P <?php echo $key->amount?></p> </td>
                                         </tr>
-                                    </table>
-                                    <?php 
+                                        <tr>
+                                            <td><p><b>Awarded to:</b> </p></td> 
+                                            <td><p> <?php echo $key->bidders_name?></p> </td>
+                                        </tr> 
+                                        <?php                                             
+      
+                                            }
                                         }
-                                    }
-                                    ?>
+                                        ?>
+                                        <?php
+                                        if($prresomode!=NULL){
+                                            foreach ($prresomode as $resomode) {
+                                                
+                                        ?>
+                                            <tr>
+                                                <td><p><b>Resolution for mode:</b> </p></td> 
+                                                <td><p>  <?php echo $resomode->reso_num?>  </p>  </td>
+                                            </tr>
+                                        <?php       
+                                            }
+                                        }
+                                        else{
+                                        ?>
+                                            <tr>
+                                                <td><p><b>Resolution for mode:</b> </p></td> 
+                                                <td><p>  (Pending) </p>  </td>
+                                            </tr>
+                                        <?php     
+                                        }
+                                        ?>
+                                        <?php
+                                        if($prresoaward!=NULL){
+                                            foreach ($prresoaward as $resoaward) {                                            
+                                        ?>
+                                            <tr>
+                                                <td><p><b>Resolution for award:</b> </p></td> 
+                                                <td><p>   <?php echo $resoaward->reso_num?></p> </td>
+                                            </tr>  
+                                        <?php       
+
+                                            }
+                                        }
+                                        else{
+                                        ?>
+                                            <tr>
+                                                <td><p><b>Resolution for award:</b> </p></td> 
+                                                <td><p>  (Pending)</p> </td>
+                                            </tr>  
+                                        <?php 
+                                        }
+                                        ?>
+                                    </table>
                                 </div>
                                 
                                 <div role="tabpanel" class="tab-pane fade" id="bidders">
-                                    <div class="row">
+                                    <?php 
+                                    if($prdetails != NULL){
+                                        foreach ($prdetails as $key) {  
+                                            if($key->type_ID == 1 OR $key->type_ID == 2){   
+                                                if($prresoaward == NULL){           
+       
+                                    ?>
+                                            <!-- ADD RESO OF AWARDS -->
+                                                <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#reso2<?php echo $key->PR_No?>"><i class="material-icons">library_add</i><span>ADD RESOLUTION FOR AWARD</span></button>
+                                                
+                                                <div class="modal fade" id="reso2<?php echo $key->PR_No?>" tabindex="-1" role="dialog">
+                                                    <div class="modal-dialog modal-sm" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title" id="smallModalLabel">Resolution for Awards Detail</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <?php echo form_open("Admin_controller/bac_addPR_resoawards/$key->PR_No");?>
+                                                                <div class="form-group form-float">
+                                                                    <div class="form-line">
+                                                                        <input type="text" class="form-control" name="resoaward" required>
+                                                                        <label class="form-label">Resolution Number</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
+                                                                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                                <?php echo form_close();?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>   
+                                                <?php }?>
+                                            <!-- ADD RESO OF AWARDS -->
+
+
+                                            <!-- ADD NEW BIDDER -->
+                                                <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#bidders1<?php echo $key->PR_No?>"><i class="material-icons">person_add</i><span>ADD NEW BIDDER</span></button>
+                                                <div class="modal fade" id="bidders1<?php echo $key->PR_No?>" tabindex="-1" role="dialog">'; ?>
+                                                    <div class="modal-dialog modal-sm" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title" id="smallModalLabel">New Bidder Details</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <?php echo form_open("Admin_controller/bac_addPR_newbidders/$key->PR_No");?>
+                                                                <div class="form-group form-float">
+                                                                        <div class="form-line">
+                                                                            <input type="text" class="form-control" name="bidders" required>
+                                                                            <label class="form-label">Bidder Name</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group form-float">
+                                                                        <div class="form-line">
+                                                                            <input type="text" class="form-control" name="contact" required>
+                                                                            <label class="form-label">Contact Number</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group form-float">
+                                                                        <div class="form-line">
+                                                                            <input type="text" class="form-control" name="email" required>
+                                                                            <label class="form-label">Email Address</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group form-float">
+                                                                        <div class="form-line">
+                                                                            <input type="text" class="form-control" name="amount" required>
+                                                                            <label class="form-label">Amount (Php)</label>
+                                                                        </div>
+                                                                    </div>                                                          
+                                                            </div>
+                                                        <div class="modal-footer">
+                                                            <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
+                                                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                        </div>
+                                                                <?php echo form_close(); ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <!-- ADD NEW BIDDER -->                                               
+
+                                            <!-- ADD EXISTING BIDDER -->
+                                                <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#bidders2<?php echo $key->PR_No?>"><i class="material-icons">person</i><span>ADD EXISTING BIDDER</span></button>
+                                                <div class="modal fade" id="bidders2<?php echo $key->PR_No?>" tabindex="-1" role="dialog">'; ?>
+                                                    <div class="modal-dialog modal-sm" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title" id="smallModalLabel">Add Existing Bidder Details</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                            <?php echo form_open("Admin_controller/bac_addPR_oldbidders/$key->PR_No");?> 
+                                                                <select class="form-control show-tick" name ="bidder">
+                                                                <?php 
+                                                                foreach($allbidders as $key){
+                                                                    echo '<option  value="'.$key->bidders_ID.'">'.$key->bidders_name.'</option>';
+                                                                }           
+                                                                ?>
+                                                                </select>  
+                                                                <br>
+                                                                <div class="form-group form-float m-t-20">
+                                                                    <div class="form-line">
+                                                                        <input type="text" class="form-control" name="amount" required>
+                                                                        <label class="form-label">Amount (Php)</label>
+                                                                    </div>
+                                                                </div>                                             
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD" >
+                                                                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                            </div>
+                                                            <?php echo form_close(); ?> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <!-- ADD EXISTING BIDDER -->   
+                                            <br><br>                                            
+                                    <?php 
+                                            }
+                                        } 
+                                    }
+                                    ?>
+                                       
+
+                                    <div class="row clearfix">                                     
+                                    <?php 
+                                    if($prbidders != NULL){
+                                        foreach($prbidders as $key){ 
+                                            if($prdetails != NULL){
+                                                foreach($prdetails as $details){ 
+                                    ?>
+                                    <!-- BOX of bidder -->
+                                   
                                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                            <?php 
-                                            if($prbidders != NULL){
-                                                foreach($prbidders as $key){ 
-                                            ?>
-                                            <div class="card" >
-                                                <div class="body bg-grey">
-                                                    <p><b>Name:</b> <?php echo $key->bidders_name?></p>
-                                                    <p><b>Contact #:</b> <?php echo $key->contact_no?></p>
-                                                    <p><b>Email:</b> <?php echo $key->email?></p>
-                                                    <b>-</b>
-                                                    <p><b>Amount:</b><?php echo $key->amount?></p>
-                                                    <p><b>Status:</b> (PENDING) </p>
+                                            <div class="card">
+                                                <div class="header bg-grey">
+                                                    <h2>
+                                                        <?php echo $key->bidders_name?> <small></small>
+                                                    </h2>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+                                                            <ul class="dropdown-menu pull-right">
+                                                                <li><a data-toggle="modal" data-target="#updateStatus">Update Status</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <table>
+                                                        <tr>
+                                                            <td><p><b>Contact Number: </b> </p></td>
+                                                                <td><p> <?php echo $key->contact_no?> </p></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><p><b>Email Address: </b> </p></td>
+                                                                <td><p> <?php echo $key->email?> </p></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><p><b>Amount: </b> </p></td>
+                                                                <td><p> P<?php echo $key->amount?></p></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><p><b>Status: </b> </p></td>
+                                                                <td><p class="col-red"> Pending </p></td>
+                                                        </tr>      
+                                                    </table>
                                                 </div>
                                             </div>
-                                            <?php 
-                                                }
-                                            } 
-                                            else{
-                                                echo "No Bidders.";
-                                            }
-                                            ?>
                                         </div>
-                                    </div>  
+                                   
+                                    <!--  BOX of bidder -->
+
+                                    <!-- Add amount -->
+                                    <div class="modal fade" id="addAmount" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog modal-sm" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="smallModalLabel">Add Amount</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                     <?php echo form_open("Admin_controller/bac_updatePR_bidderamount/$key->bidders_ID/$details->PR_No")?>
+                                                    Amount: <input type="text" style="margin-bottom: 10px; width:170px;" name="amount">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input class="btn btn-link waves-effect" type="submit" name="submit" value="SAVE CHANGES">
+                                                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                    <?php echo form_close();?>     
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Add amount -->
+
+                                    <!-- Update Status -->
+                                    <div class="modal fade" id="updateStatus" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog modal-sm" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="smallModalLabel">Update Status</h4>
+                                                </div>
+                                                <div class="modal-body p-t-10">
+                                                    <form  action="" method="post">    
+                                                        <?php echo form_open("Admin_controller/bac_updatePR_bidderstatus/$key->bidders_ID/$details->PR_No");?>
+                                                        <div class="">
+                                                            <input type="radio" name="status[]" id="Approved" value="Approved"><label for="Approved">Approved</label><br>
+                                                            <input type="radio" name="status[]" id="Disapproved" value="Disapproved"><label for="Disapproved">Disapproved</label><br>
+                                                        </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input class="btn btn-link waves-effect" type="submit" name="submit" value="SAVE CHANGES">
+                                                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                    <?php echo form_close();?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Update Status -->
+
+                                    <?php 
+                                                } 
+                                            } 
+                                        } 
+                                    }
+                                    else{                                                
+                                        echo "<div class='body'>No Bidders.</div>";
+                                    }
+                                    ?>                                        
+                                    </div>
                                 </div>
+
                                 
                                 <div role="tabpanel" class="tab-pane fade" id="files">
                                     <div class="table-responsive">
@@ -162,49 +449,43 @@
                                         if($prdetails != NULL){
                                             foreach ($prdetails as $key) {
                                         ?>
-                                        <!-- ADD ATTACHED FILE -->
-                                            <?php  
-                                            echo '<a class="btn bg-red waves-effect" data-toggle="modal" data-target="#attachments'.$key->PR_No.'">ADD ATTACHED FILE </a>';
-                                            echo '
-                                                <div class="modal fade" id="attachments'.$key->PR_No.'" tabindex="-1" role="dialog">'; ?>
-                                                    <div class="modal-dialog modal-sm" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title" id="smallModalLabel">PR DETAILS</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                            <?php echo form_open("Admin_controller/bac_addPR_attachments/$key->PR_No");?>
-                                                                <p>Add name of Attached File for PR# <?php echo $key->PR_No?>:</p>
-                                                                <input type="text" name="attachedfile" required>                                                            
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
-                                                                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
-                                                            </div>
-                                                            <?php echo form_close(); ?>
-                                                        </div>
+                                        <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#attachments<?php echo $key->PR_No;?>"><i class="material-icons">note_add</i><span>ADD ATTACHED FILE</span></button>
+                                        <div class="modal fade" id="attachments<?php echo $key->PR_No;?>" tabindex="-1" role="dialog">'; ?>
+                                            <div class="modal-dialog modal-sm" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="smallModalLabel">Attached File Detail</h4>
                                                     </div>
+                                                    <div class="modal-body">
+                                                    <?php echo form_open("Admin_controller/bac_addPR_attachments/$key->PR_No");?>
+                                                        <div class="form-group form-float">
+                                                            <div class="form-line">
+                                                                <input type="text" class="form-control" name="attachedfile" required>
+                                                                <label class="form-label">File Name</label>
+                                                            </div>
+                                                        </div>                                                           
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
+                                                        <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                    </div>
+                                                    <?php echo form_close(); ?>
                                                 </div>
-                                        <!-- ADD ATTACHED FILE -->
-
+                                            </div>
+                                        </div>
                                         <?php 
                                             } 
                                         }
                                         ?>
                                         <br><br> 
-                                        <table class="table table-bordered table-striped table-hover dataTable js-exportable">
-                                            <thead>
+                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                           <thead>
                                                 <tr>
                                                     <th>Date Added</th>
                                                     <th>Name</th>
+                                                    <th>Added By</th>
                                                 </tr>
                                             </thead>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>Date Added</th>
-                                                    <th>Name</th>
-                                                </tr>
-                                            </tfoot>
                                             <tbody>
                                                 <?php 
                                                 if($prattachements != NULL){
@@ -213,6 +494,7 @@
                                                 <tr>
                                                     <td><?php echo $key->date_attached?></td>
                                                     <td><?php echo $key->file_name?></td>
+                                                    <td><?php echo $key->admin_user_name?> - <?php echo $key->admin_office_name?></td>
                                                 </tr>
                                                 <?php 
                                                     }
@@ -223,56 +505,51 @@
                                         </table>
                                     </div>
                                 </div>
+
                                 <div role="tabpanel" class="tab-pane fade" id="remarks">
                                     <div class="table-responsive">
                                         <?php 
                                         if($prdetails != NULL){
                                             foreach ($prdetails as $key) {
                                         ?>
-                                        <!-- ADD REMARKS -->
-                                            <?php  
-                                            echo '<a class="btn bg-red waves-effect" data-toggle="modal" data-target="#remarks'.$key->PR_No.'">ADD REMARKS </a>';
-                                            echo '
-                                                <div class="modal fade" id="remarks'.$key->PR_No.'" tabindex="-1" role="dialog">'; ?>
-                                                    <div class="modal-dialog modal-sm" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title" id="smallModalLabel">PR DETAILS</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                            <?php echo form_open("Admin_controller/bac_addPR_remarks/$key->PR_No");?>
-                                                                <p>Add Remarks for PR# <?php echo $key->PR_No?>:</p>
-                                                                <input type="text" name="remarks" required>                                                            
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
-                                                                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
-                                                            </div>
-                                                            <?php echo form_close(); ?>
+                                        <button class="btn bg-red waves-effect" data-toggle="modal" data-target="#remarks<?php echo $key->PR_No;?>"><i class="material-icons">add</i><span>ADD REMARKS</span></button>
+                                        
+                                            <div class="modal fade" id="remarks<?php echo $key->PR_No;?>" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog modal-sm" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="smallModalLabel">Newe Remarks Detail</h4>
                                                         </div>
+                                                        <div class="modal-body">
+                                                        <?php echo form_open("Admin_controller/bac_addPR_remarks/$key->PR_No");?>
+                                                            <div class="form-group form-float m-t-20">
+                                                                <div class="form-line">
+                                                                    <input type="text" class="form-control" name="remarks" required>
+                                                                    <label class="form-label">Input Remarks</label>
+                                                                </div>
+                                                            </div>                                                          
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input class="btn bg-red waves-effect" type="submit" name="submit" value="ADD">
+                                                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                        </div>
+                                                        <?php echo form_close(); ?>
                                                     </div>
                                                 </div>
-                                        <!-- ADD REMARKS -->
+                                            </div>
                                         <?php 
                                             } 
                                         }
                                         ?>
                                         <br><br>
-                                        <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                             <thead>
                                                 <tr>
                                                     <th>Date Added</th>
+                                                    <th>Remarks</th>                                                    
                                                     <th>Added By</th>
-                                                    <th>Remarks</th>
                                                 </tr>
                                             </thead>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>Date Added</th>
-                                                    <th>Added By</th>
-                                                    <th>Remarks</th>
-                                                </tr>
-                                            </tfoot>
                                             <tbody>                                                
                                                 <?php 
                                                 if($prremarks != NULL){
@@ -280,8 +557,8 @@
                                                 ?>
                                                 <tr>
                                                     <td><?php echo $key->date_added ?></td>
+                                                    <td><?php echo $key->remarks ?></td>                                                   
                                                     <td><?php echo $key->admin_user_name ?> - <?php echo $key->admin_office_name?></td>
-                                                    <td><?php echo $key->remarks ?></td>
                                                 </tr>
                                                 <?php 
                                                     }
@@ -291,14 +568,12 @@
                                         </table>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- #END# Example Tab -->
-        </div>
-    </section>
     <style type="text/css">
         .card1{
             position: relative;
